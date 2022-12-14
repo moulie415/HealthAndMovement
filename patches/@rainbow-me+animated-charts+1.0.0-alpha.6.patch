@@ -1,0 +1,14 @@
+diff --git a/node_modules/@rainbow-me/animated-charts/package.json b/node_modules/@rainbow-me/animated-charts/package.json
+index 13857d9..e4d9d89 100644
+--- a/node_modules/@rainbow-me/animated-charts/package.json
++++ b/node_modules/@rainbow-me/animated-charts/package.json
+@@ -17,9 +17,6 @@
+   },
+   "license": "MIT",
+   "dependencies": {
+-    "react-native-gesture-handler": "^1.7.0",
+-    "react-native-reanimated": "^2.0.0-alpha.5",
+-    "react-native-svg": "^12.1.0",
+     "react-native-haptic-feedback": "^1.10.0"
+   },
+   "peerDependencies": {

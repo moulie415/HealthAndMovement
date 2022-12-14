@@ -20,13 +20,22 @@ import LinearGradient from 'react-native-linear-gradient';
 import Text from './Text';
 import Button from './Button';
 import Spinner from './Spinner';
+import {
+  ChartDot,
+  ChartPath,
+  ChartPathProvider,
+  monotoneCubicInterpolation,
+} from '@rainbow-me/animated-charts';
+
+export const {width: SIZE} = Dimensions.get('window');
 
 const Chart: React.FC<{
-  data: LineChartData;
+  data: {x: number; y: number}[];
   title: string;
   footer: ReactNode;
   formatLabel?: (label: string) => string;
 }> = ({data, title, footer, formatLabel}) => {
+  const points = monotoneCubicInterpolation({data, range: 40});
   return (
     <View>
       <Text
@@ -38,7 +47,16 @@ const Chart: React.FC<{
         }}>
         {title}
       </Text>
-      <LineChart
+      <ChartPathProvider data={{points, smoothingStrategy: 'bezier'}}>
+        <ChartPath
+          height={SIZE / 2}
+          stroke="yellow"
+          width={Dimensions.get('screen').width * 0.9}
+        />
+        <ChartDot style={{backgroundColor: 'blue'}} />
+      </ChartPathProvider>
+
+      {/* <LineChart
         data={data}
         width={Dimensions.get('screen').width * 0.9}
         height={DevicePixels[200]}
@@ -54,7 +72,7 @@ const Chart: React.FC<{
           return label.slice(0, -1);
         }}
         withShadow={false}
-      />
+      /> */}
       {footer}
     </View>
   );
@@ -95,8 +113,8 @@ const ProfileCharts: React.FC<{
   const [showCharts, setShowCharts] = useState(false);
 
   const weightItems: {
-    data: number[];
-    chartData: LineChartData;
+    data: {x: number; y: number}[];
+    // chartData: LineChartData;
   } = useMemo(() => {
     return getBMIItems(weight, height, weightSamples, heightSamples, filter);
   }, [weightSamples, weight, height, heightSamples, filter]);
@@ -222,7 +240,7 @@ const ProfileCharts: React.FC<{
         <ScrollView horizontal>
           <Chart
             title="BMI"
-            data={weightItems.chartData}
+            data={weightItems.data}
             footer={
               latestBMI && (
                 <>
@@ -234,7 +252,7 @@ const ProfileCharts: React.FC<{
                       marginVertical: DevicePixels[10],
                     }}>
                     Your current BMI is{' '}
-                    <Text style={{fontWeight: 'bold'}}>{latestBMI}</Text>
+                    {/* <Text style={{fontWeight: 'bold'}}>{latestBMI}</Text> */}
                   </Text>
 
                   <Text
@@ -256,7 +274,7 @@ const ProfileCharts: React.FC<{
               )
             }
           />
-          <Chart
+          {/* <Chart
             title="Body fat percentage"
             data={bodyFatItems.chartData}
             formatLabel={label => {
@@ -307,7 +325,7 @@ const ProfileCharts: React.FC<{
                 }}
               />
             }
-          />
+          /> */}
         </ScrollView>
       ) : (
         <View

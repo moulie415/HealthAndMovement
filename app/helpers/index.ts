@@ -160,7 +160,7 @@ export const getBMIItems = (
   heightSamples: Sample[],
   filter: 6 | 30 | 365,
 ) => {
-  const labels = [];
+  // const labels = [];
   const data = [];
 
   let lowest = weight && height ? getBMI(height, weight) : 0;
@@ -169,78 +169,78 @@ export const getBMIItems = (
   for (let i = filter as number; i >= 0; i--) {
     const day = moment().subtract(i, 'days').endOf('day');
 
-    if (i === 0) {
-      const bmi = getBMI(height, weight);
-      if (bmi > highest) {
-        highest = bmi;
-      }
-      if (bmi < lowest) {
-        lowest = bmi;
-      }
-      data.push(bmi);
-      if (filter === 6) {
-        labels.push(day.format('dd'));
-      }
-      if (filter === 30) {
-        labels.push(day.format('Do'));
-      }
-      if (filter === 365) {
-        labels.push(day.format('MMM'));
-      }
-    } else if (
-      i === filter ||
-      filter === 6 ||
-      (filter === 30 && i % 4 === 0) ||
-      (filter === 365 && i % 50 === 0)
-    ) {
-      const weightSample =
-        (weightSamples &&
-          weightSamples.length &&
-          findClosestSampleToDate(weightSamples, day, weight)) ||
-        weight;
+    //if (i === 0) {
+    //const bmi = getBMI(height, weight);
+    // if (bmi > highest) {
+    //   highest = bmi;
+    // }
+    // if (bmi < lowest) {
+    //   lowest = bmi;
+    // }
+    // data.push(bmi);
+    // if (filter === 6) {
+    //   labels.push(day.format('dd'));
+    // }
+    // if (filter === 30) {
+    //   labels.push(day.format('Do'));
+    // }
+    // if (filter === 365) {
+    //   labels.push(day.format('MMM'));
+    // }
+    // } else if (
+    //   i === filter ||
+    //   filter === 6 ||
+    //   (filter === 30 && i % 4 === 0) ||
+    //   (filter === 365 && i % 50 === 0)
+    // ) {
+    const weightSample =
+      (weightSamples &&
+        weightSamples.length &&
+        findClosestSampleToDate(weightSamples, day, weight)) ||
+      weight;
 
-      const heightSample =
-        (heightSamples &&
-          heightSamples.length &&
-          findClosestSampleToDate(heightSamples, day, height)) ||
-        height;
-      const bmi = getBMI(heightSample, weightSample);
-      if (bmi > highest) {
-        highest = bmi;
-      }
-      if (bmi < lowest) {
-        lowest = bmi;
-      }
-      data.push(bmi);
-
-      if (filter === 6) {
-        labels.push(day.format('dd'));
-      }
-      if (filter === 30) {
-        labels.push(day.format('Do'));
-      }
-      if (filter === 365) {
-        labels.push(day.format('MMM'));
-      }
+    const heightSample =
+      (heightSamples &&
+        heightSamples.length &&
+        findClosestSampleToDate(heightSamples, day, height)) ||
+      height;
+    const bmi = getBMI(heightSample, weightSample);
+    if (bmi > highest) {
+      highest = bmi;
     }
+    if (bmi < lowest) {
+      lowest = bmi;
+    }
+    data.push({y: bmi, x: day.valueOf()});
+
+    // if (filter === 6) {
+    //   labels.push(day.format('dd'));
+    // }
+    // if (filter === 30) {
+    //   labels.push(day.format('Do'));
+    // }
+    // if (filter === 365) {
+    //   labels.push(day.format('MMM'));
+    // }
+    // }
   }
 
-  const chartData = {
-    labels,
-    datasets: [
-      {
-        data,
-        color: (opacity = 1) => colors.appBlue, // optional
-        strokeWidth: 4, // optional
-      },
-      {
-        data: [lowest - 5, highest + 5],
-        color: () => 'rgba(0, 0, 0, 0)',
-      },
-    ],
-  };
+  // const chartData = {
+  //   labels,
+  //   datasets: [
+  //     {
+  //       data,
+  //       color: (opacity = 1) => colors.appBlue, // optional
+  //       strokeWidth: 4, // optional
+  //     },
+  //     {
+  //       data: [lowest - 5, highest + 5],
+  //       color: () => 'rgba(0, 0, 0, 0)',
+  //     },
+  //   ],
+  // };
 
-  return {data, chartData};
+  return {data /*chartData*/};
 };
 
 const getBMI = (h: number, w: number) => {
