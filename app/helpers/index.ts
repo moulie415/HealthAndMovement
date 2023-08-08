@@ -61,9 +61,10 @@ export const getSampleItems = (
   samples: Sample[],
 ) => {
   if (profileVal === undefined || profileVal === null) {
-    return {data: [] as {x: number; y: number}[], highest: 0, lowest: 0};
+    return {x: [] as number[], y: [] as number[], highest: 0, lowest: 0};
   }
-  const data = [];
+  const x = [];
+  const y = [];
 
   let lowest = profileVal || 0;
   let highest = profileVal || 0;
@@ -78,7 +79,8 @@ export const getSampleItems = (
       if (profileVal < lowest) {
         lowest = profileVal;
       }
-      data.push({y: profileVal, x: day.valueOf()});
+      y.push(profileVal);
+      x.push(day.valueOf());
     } else if (
       i === filter ||
       filter === 6 ||
@@ -96,11 +98,12 @@ export const getSampleItems = (
       if (sample < lowest) {
         lowest = sample;
       }
-      data.push({y: sample, x: day.valueOf()});
+      y.push(sample);
+      x.push(day.valueOf());
     }
   }
 
-  return {data, highest, lowest};
+  return {x, y, highest, lowest};
 };
 
 export const getBMIItems = (
@@ -110,9 +113,10 @@ export const getBMIItems = (
   heightSamples: Sample[],
   filter: 6 | 30 | 365,
 ) => {
-  const data = [];
+  const x = [];
+  const y = [];
   if (!height || !weight) {
-    return {data: [], lowest: 0, highest: 0};
+    return {x: [] as number[], y: [] as number[], lowest: 0, highest: 0};
   }
   let lowest = weight && height ? getBMI(height, weight) : 0;
   let highest = weight && height ? getBMI(height, weight) : 0;
@@ -128,7 +132,9 @@ export const getBMIItems = (
       if (bmi < lowest) {
         lowest = bmi;
       }
-      data.push({y: bmi, x: day.valueOf()});
+
+      y.push(bmi);
+      x.push(day.valueOf());
     } else if (
       i === filter ||
       filter === 6 ||
@@ -153,10 +159,11 @@ export const getBMIItems = (
       if (bmi < lowest) {
         lowest = bmi;
       }
-      data.push({y: bmi, x: day.valueOf()});
+      y.push(bmi);
+      x.push(day.valueOf());
     }
   }
-  return {data, lowest, highest};
+  return {x, y, lowest, highest};
 };
 
 const getBMI = (h: number, w: number) => {

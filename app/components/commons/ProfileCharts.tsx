@@ -7,7 +7,6 @@ import React, {
   useRef,
   useState,
 } from 'react';
-
 import {PERCENTAGES} from '../../constants';
 import colors from '../../constants/colors';
 import {connect} from 'react-redux';
@@ -17,6 +16,10 @@ import {getBMIItems, getSampleItems} from '../../helpers';
 import Button from './Button';
 import MetricExplained from './MetricExplained';
 import Color from 'color';
+import Modal from './Modal';
+import ReanimatedGraph, {
+  ReanimatedGraphPublicMethods,
+} from '@birdwingo/react-native-reanimated-graph';
 
 const Chart: React.FC<{
   title: string;
@@ -27,6 +30,8 @@ const Chart: React.FC<{
   ranges: number[];
   colors: string[];
   labels: string[];
+  y: number[];
+  x: number[];
   onPress?: () => void;
 }> = ({
   title,
@@ -38,24 +43,72 @@ const Chart: React.FC<{
   colors: colorsArr,
   labels,
   onPress,
+  x,
+  y,
 }) => {
-  console.log(colorsArr);
+  const [modalVisible, setModalVisible] = useState(false);
+  const graphRef = useRef<ReanimatedGraphPublicMethods>(null);
+
+  useEffect(() => {
+    const updateGraphData = () => {
+      // Call this function to update the data displayed on the graph
+      if (graphRef.current) {
+        graphRef.current.updateData({xAxis: x, yAxis: y});
+      }
+    };
+    updateGraphData();
+  }, [x, y]);
+  const data = {
+    // Your data points here
+    xAxis: [0, 1, 2, 3, 4],
+    yAxis: [0, 5, 2, 7, 4],
+  };
+
+  console.log(title, x, y);
+
   return (
-    <View style={{alignItems: 'center'}}>
-      <MetricExplained
-        onPress={onPress}
-        suffix={suffix}
-        current={current}
-        ranges={
-          minY !== undefined && !!maxY && !!ranges
-            ? [minY, ...ranges, maxY]
-            : []
-        }
-        title={title}
-        colors={colorsArr}
-        labels={labels}
-      />
-    </View>
+    <>
+      <View style={{alignItems: 'center'}}>
+        <MetricExplained
+          onPress={onPress}
+          onPressViewHistorical={() => setModalVisible(true)}
+          suffix={suffix}
+          current={current}
+          ranges={
+            minY !== undefined && !!maxY && !!ranges
+              ? [minY, ...ranges, maxY]
+              : []
+          }
+          title={title}
+          colors={colorsArr}
+          labels={labels}
+        />
+      </View>
+      <Modal
+        visible={modalVisible}
+        onRequestClose={() => setModalVisible(false)}>
+        <View
+          style={{
+            backgroundColor: colors.appGrey,
+
+            width: '90%',
+            padding: 20,
+          }}>
+          <View style={{height: 200, flex: 1}}>
+            <ReanimatedGraph
+              containerStyle={{backgroundColor: colors.appGrey}}
+              ref={graphRef}
+              xAxis={data.xAxis}
+              yAxis={data.yAxis}
+              height={200}
+
+              // Add any other props as needed
+            />
+          </View>
+          <Button text="Close" onPress={() => setModalVisible(false)} />
+        </View>
+      </Modal>
+    </>
   );
 };
 
@@ -96,7 +149,8 @@ const ProfileCharts: React.FC<{
   const [showCharts, setShowCharts] = useState(true);
 
   const weightItems: {
-    data: {x: number; y: number}[];
+    x: number[];
+    y: number[];
     lowest: number;
     highest: number;
   } = useMemo(() => {
@@ -104,7 +158,8 @@ const ProfileCharts: React.FC<{
   }, [weightSamples, weight, height, heightSamples, filter]);
 
   const bodyFatItems: {
-    data: {x: number; y: number}[];
+    x: number[];
+    y: number[];
     lowest: number;
     highest: number;
   } = useMemo(() => {
@@ -112,7 +167,8 @@ const ProfileCharts: React.FC<{
   }, [bodyFatPercentageSamples, filter, bodyFatPercentage]);
 
   const muscleMassItems: {
-    data: {x: number; y: number}[];
+    x: number[];
+    y: number[];
     lowest: number;
     highest: number;
   } = useMemo(() => {
@@ -120,18 +176,21 @@ const ProfileCharts: React.FC<{
   }, [muscleMassSamples, filter, muscleMass]);
 
   const boneMassItems: {
-    data: {x: number; y: number}[];
+    x: number[];
+    y: number[];
     lowest: number;
     highest: number;
   } = useMemo(() => {
     return getSampleItems(boneMass, filter, boneMassSamples);
   }, [boneMassSamples, filter, boneMass]);
 
-  const latestBMI = weightItems?.data[weightItems.data.length - 1]?.y;
+  const latestBMI = weightItems?.y[weightItems.y.length - 1];
 
   return (
     <>
       <Chart
+        x={weightItems.x}
+        y={weightItems.y}
         current={latestBMI}
         title="BMI"
         minY={0}
@@ -153,6 +212,8 @@ const ProfileCharts: React.FC<{
       />
 
       <Chart
+        x={bodyFatItems.x}
+        y={bodyFatItems.y}
         current={bodyFatPercentage}
         title="Body fat percentage"
         minY={0}
@@ -176,6 +237,8 @@ const ProfileCharts: React.FC<{
         onPress={() => setShowBodyFatPercentageModal(true)}
       />
       <Chart
+        x={muscleMassItems.x}
+        y={muscleMassItems.y}
         current={muscleMass}
         minY={0}
         maxY={70}
@@ -191,6 +254,8 @@ const ProfileCharts: React.FC<{
         labels={['Low', 'Normal', 'High']}
       />
       <Chart
+        x={boneMassItems.x}
+        y={boneMassItems.y}
         current={boneMass}
         title="Bone mass"
         suffix="kg"
