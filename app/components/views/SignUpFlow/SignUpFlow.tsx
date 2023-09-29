@@ -35,6 +35,7 @@ import moment from 'moment';
 import PersonalDetails from './PersonalDetails';
 import Button from '../../commons/Button';
 import StepIndicator from 'react-native-step-indicator';
+import {initAchievements} from '../../../helpers/achievements';
 
 const {width} = Dimensions.get('window');
 
@@ -97,6 +98,7 @@ const SignUpFlow: React.FC<{
         };
         fetchData();
       }
+      await initAchievements();
       setLoading(false);
     };
     setup();

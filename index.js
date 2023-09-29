@@ -15,7 +15,7 @@ import {
 import {setUnread} from './app/actions/profile';
 import {alertPremiumFeature} from './app/helpers/exercises';
 import messaging from '@react-native-firebase/messaging';
-import GameCenter from 'react-native-game-center';
+
 
 PushNotification.configure({
   // (optional) Called when Token is generated (iOS and Android)
@@ -142,14 +142,5 @@ PushNotification.configure({
    *  */
   requestPermissions: true,
 });
-
-const leaderboardIdentifier="high_scores"
-const achievementIdentifier="novice_award"
-
-
-//init app
-GameCenter.init({leaderboardIdentifier,achievementIdentifier})
-  .then(console.log)
-  .catch(console.warn)
 
 AppRegistry.registerComponent(appName, () => App);

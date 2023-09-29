@@ -51,6 +51,11 @@ import {logError} from '../helpers/error';
 import * as _ from 'lodash';
 import {setProfile} from '../actions/profile';
 import * as polar from '../helpers/polar';
+import {
+  IOSAchievement,
+  getAchievements,
+  submitAchievementScore,
+} from '../helpers/achievements';
 
 export function* getExercises(action: GetExercisesAction) {
   const {level, goal, warmUp, coolDown} = action.payload;
@@ -100,12 +105,27 @@ export function* saveWorkout(action: SaveWorkoutAction) {
   try {
     const {uid} = yield select((state: MyRootState) => state.profile.profile);
     yield call(api.saveWorkout, action.payload, uid);
+    yield fork(handleWorkoutFinished);
     if (action.payload.saved) {
       yield call(Snackbar.show, {text: 'Workout saved'});
     }
   } catch (e) {
     logError(e);
     yield call(Snackbar.show, {text: 'Error saving workout'});
+  }
+}
+
+export function* handleWorkoutFinished() {
+  const firstWorkout = 'first_workout';
+  const achievements: IOSAchievement[] = yield call(getAchievements);
+
+  if (
+    !(
+      achievements &&
+      achievements.some(achievement => achievement.identifier === firstWorkout)
+    )
+  ) {
+    yield call(submitAchievementScore, 100, firstWorkout);
   }
 }
 

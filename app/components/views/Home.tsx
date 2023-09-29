@@ -19,6 +19,7 @@ import {
 import Header from '../commons/Header';
 import {CLIENT_PREMIUM} from '../../constants';
 import isTestFlight from '../../helpers/isTestFlight';
+import {openAchievementModal, resetAchievements} from '../../helpers/achievements';
 
 const {height, width} = Dimensions.get('window');
 
@@ -44,7 +45,6 @@ const Home: React.FC<{
 
   useEffect(() => {
     eventEmitter?.on('stepChange', handleOnStepChange);
-
     return () => {
       eventEmitter?.off('stepChange', handleOnStepChange);
     };

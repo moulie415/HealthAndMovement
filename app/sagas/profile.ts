@@ -100,6 +100,8 @@ import _ from 'lodash';
 import {CLIENT_PREMIUM} from '../constants';
 import isTestFlight from '../helpers/isTestFlight';
 import {statusCodes} from '@react-native-google-signin/google-signin';
+import GameCenter from 'react-native-game-center';
+import {initAchievements} from '../helpers/achievements';
 
 const notif = new Sound('notif.wav', Sound.MAIN_BUNDLE, error => {
   if (error) {
@@ -594,6 +596,7 @@ function* handleAuthWorker(action: HandleAuthAction) {
         if (available) {
           yield call(initBiometrics);
         }
+        yield fork(initAchievements);
         resetToTabs();
         try {
           const getLinkPromise = () => {

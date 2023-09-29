@@ -15,6 +15,8 @@
 		<string>applinks:healthandmovement/invite</string>
 		<string>applinks:healthandmovement</string>
 	</array>
+	<key>com.apple.developer.game-center</key>
+	<true/>
 	<key>com.apple.developer.healthkit</key>
 	<true/>
 	<key>com.apple.developer.healthkit.access</key>

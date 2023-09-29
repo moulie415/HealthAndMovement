@@ -28,6 +28,7 @@ import * as Sentry from '@sentry/react-native';
 import {getBuildNumber, getVersion} from 'react-native-device-info';
 import Profile from '../../../types/Profile';
 import {DrawerContentComponentProps} from '@react-navigation/drawer';
+import { openAchievementModal } from '../../../helpers/achievements';
 
 export const MoreItem: React.FC<{item: ListItem}> = ({item}) => {
   return (
@@ -113,7 +114,7 @@ const DrawerContent: React.FC<Props> = ({
     },
     {
       title: 'Premium',
-      icon: 'trophy',
+      icon: 'crown',
       onPress: () => {
         navigationRef.navigate('Premium', {});
         navigation.closeDrawer();
@@ -132,6 +133,14 @@ const DrawerContent: React.FC<Props> = ({
       icon: 'cog',
       onPress: () => {
         navigationRef.navigate('Settings');
+        navigation.closeDrawer();
+      },
+    },
+    {
+      title: 'Achievements',
+      icon: 'trophy',
+      onPress: () => {
+        openAchievementModal();
         navigation.closeDrawer();
       },
     },

@@ -1,6 +1,7 @@
 import {
   call,
   debounce,
+  fork,
   put,
   select,
   takeLatest,
@@ -23,6 +24,7 @@ import Snackbar from 'react-native-snackbar';
 import {SavedQuickRoutine} from '../types/SavedItem';
 import {setLoading} from '../actions/exercises';
 import {logError} from '../helpers/error';
+import {handleWorkoutFinished} from './exercises';
 
 export function* getQuickRoutines() {
   try {
@@ -39,6 +41,7 @@ function* saveQuickRoutine(action: SaveQuickRoutineAction) {
   try {
     const {uid} = yield select((state: MyRootState) => state.profile.profile);
     yield call(api.saveQuickRoutine, action.payload, uid);
+    yield fork(handleWorkoutFinished);
     if (action.payload.saved) {
       yield call(Snackbar.show, {text: 'Workout saved '});
     }
