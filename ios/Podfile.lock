@@ -1456,6 +1456,8 @@ PODS:
     - Firebase/Storage (= 10.15.0)
     - React-Core
     - RNFBApp
+  - RNGameCenter (1.2.3):
+    - React-Core
   - RNGestureHandler (2.13.1):
     - React-Core
   - RNGoogleMobileAds (12.1.1):
@@ -1609,6 +1611,7 @@ DEPENDENCIES:
   - "RNFBFunctions (from `../node_modules/@react-native-firebase/functions`)"
   - "RNFBMessaging (from `../node_modules/@react-native-firebase/messaging`)"
   - "RNFBStorage (from `../node_modules/@react-native-firebase/storage`)"
+  - RNGameCenter (from `../node_modules/react-native-game-center`)
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
   - RNGoogleMobileAds (from `../node_modules/react-native-google-mobile-ads`)
   - "RNGoogleSignin (from `../node_modules/@react-native-google-signin/google-signin`)"
@@ -1833,6 +1836,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@react-native-firebase/messaging"
   RNFBStorage:
     :path: "../node_modules/@react-native-firebase/storage"
+  RNGameCenter:
+    :path: "../node_modules/react-native-game-center"
   RNGestureHandler:
     :path: "../node_modules/react-native-gesture-handler"
   RNGoogleMobileAds:
@@ -1987,6 +1992,7 @@ SPEC CHECKSUMS:
   RNFBFunctions: e224b9c0165ae4fd275ab65f49b827372cbf91fd
   RNFBMessaging: b167065ee2fcc7fe43a32b35d79d5eb23bceb4ad
   RNFBStorage: aa0d6ac695aff1841f2b87285bb90ed6271d37d9
+  RNGameCenter: dd13ad5d38cbc73bc3e42a2a89001dbacaecfa8f
   RNGestureHandler: 38aa38413896620338948fbb5c90579a7b1c3fde
   RNGoogleMobileAds: e87db4771693cc7774805cba5faeac9fbab0b723
   RNGoogleSignin: ccaa4a81582cf713eea562c5dd9dc1961a715fd0

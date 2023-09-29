@@ -8694,6 +8694,10 @@ react-native-flipper@^0.190.0:
   resolved "https://registry.yarnpkg.com/react-native-flipper/-/react-native-flipper-0.190.0.tgz#367e17b02690ddca0b3a02a19cb3c81efcf19574"
   integrity sha512-hkVked8cWBVUVZJSAX8GY+B4AaJ/sdYDRqeAcLcQ16kyMzyHxU3PWu27mXTYoRJqA2W85iAIaE1rONYoaEiKnA==
 
+"react-native-game-center@https://github.com/moulie415/react-native-game-center.git":
+  version "1.2.3"
+  resolved "https://github.com/moulie415/react-native-game-center.git#44dfedfb3c3cd7d4158085301c859ad99ae87279"
+
 react-native-gesture-handler@^2.13.1:
   version "2.13.1"
   resolved "https://registry.yarnpkg.com/react-native-gesture-handler/-/react-native-gesture-handler-2.13.1.tgz#bad89caacd62c4560b9953b02f85f37ee42d5d4c"

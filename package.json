@@ -67,6 +67,7 @@
     "react-native-fast-image": "^8.5.11",
     "react-native-fbsdk-next": "11.2.1",
     "react-native-flipper": "^0.190.0",
+    "react-native-game-center": "https://github.com/moulie415/react-native-game-center.git",
     "react-native-gesture-handler": "^2.13.1",
     "react-native-gifted-chat": "^1.1.1",
     "react-native-google-fit": "^0.19.1",
