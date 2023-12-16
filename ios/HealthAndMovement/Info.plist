@@ -116,15 +116,15 @@
 	<true/>
 	<key>NSAppTransportSecurity</key>
 	<dict>
-		<key>NSExceptionDomains</key>
-		<dict>
-			<key>localhost</key>
-			<dict>
-				<key>NSExceptionAllowsInsecureHTTPLoads</key>
-				<true/>
-			</dict>
-		</dict>
+		<key>NSAllowsArbitraryLoads</key>
+		<false/>
+		<key>NSAllowsLocalNetworking</key>
+		<true/>
 	</dict>
+	<key>NSAppleMusicUsageDescription</key>
+	<string>$(PRODUCT_NAME) wants access to your Music library</string>
+	<key>NSCalendarsUsageDescription</key>
+	<string>This app requires access to the calendar</string>
 	<key>NSCameraUsageDescription</key>
 	<string>So you can take a photo for your profile picture</string>
 	<key>NSHealthShareUsageDescription</key>
@@ -132,13 +132,11 @@
 	<key>NSHealthUpdateUsageDescription</key>
 	<string>Share workout data with other apps.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string/>
-	<key>NSPhotoLibraryUsageDescription</key>
-	<string>So you can upload a photo for your profile picture</string>
-	<key>NSAppleMusicUsageDescription</key>
-	<string>$(PRODUCT_NAME) wants access to your Music library</string>
+	<string></string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>So you can record audio when reporting a problem with the app</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>So you can upload a photo for your profile picture</string>
 	<key>SKAdNetworkItems</key>
 	<array>
 		<dict>
@@ -321,7 +319,5 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
-	<key>NSCalendarsUsageDescription</key>
-	<string>This app requires access to the calendar</string>
 </dict>
 </plist>
