@@ -1,16 +1,9 @@
-import db, {FirebaseFirestoreTypes} from '@react-native-firebase/firestore';
 import functions from '@react-native-firebase/functions';
-import Exercise from '../types/Exercise';
 import Profile from '../types/Profile';
-import Test from '../types/Test';
 import {CoolDown, Goal, Level, WarmUp} from '../types/Shared';
-import QuickRoutine from '../types/QuickRoutines';
 import {SavedQuickRoutine, SavedTest, SavedWorkout} from '../types/SavedItem';
-import Education from '../types/Education';
 import Snackbar from 'react-native-snackbar';
-import Chat from '../types/Chat';
 import Message from '../types/Message';
-import moment from 'moment';
 import {WeeklyItems} from '../reducers/profile';
 import auth, {FirebaseAuthTypes} from '@react-native-firebase/auth';
 import appleAuth from '@invertase/react-native-apple-authentication';
@@ -20,7 +13,6 @@ import {
   statusCodes,
 } from '@react-native-google-signin/google-signin';
 import {Alert} from 'react-native';
-import chunkArrayInGroups from './chunkArrayIntoGroups';
 
 GoogleSignin.configure({
   webClientId:
@@ -140,22 +132,17 @@ export const signIn = async (
   }
 };
 
-export const getUser = (uid: string) => {
-  return db().collection('users').doc(uid).get();
+export const getUser = async () => {
+  const response = await functions().httpsCallable('getUser')();
+  return response.data;
 };
 
 export const setUser = (user: Profile) => {
-  return db().collection('users').doc(user.uid).set(user);
+  return functions().httpsCallable('setUser')({user});
 };
 
-export const updateUser = (user: any, uid: string) => {
-  return db()
-    .collection('users')
-    .doc(uid)
-    .update({
-      ...user,
-      birthday: moment(user.dob).dayOfYear(),
-    });
+export const updateUser = (user: any) => {
+  return functions().httpsCallable('updateUser')({user});
 };
 
 export const createUser = async (
@@ -164,77 +151,11 @@ export const createUser = async (
   extraData: object,
 ) => {
   const {user} = await auth().createUserWithEmailAndPassword(email, password);
-  const reminderTime = new Date(
-    new Date().getFullYear(),
-    new Date().getMonth(),
-    new Date().getDate() + 1,
-    9,
-    0,
-    0,
-  ).toISOString();
-  await db()
-    .collection('users')
-    .doc(user.uid)
-    .set({
-      uid: user.uid,
-      email: user.email,
-      workoutReminders: true,
-      workoutReminderTime: reminderTime,
-      testReminderTime: reminderTime,
-      testReminders: true,
-      syncPlanWithCalendar: false,
-      autoPlay: true,
-      prepTime: 15,
-      workoutMusic: true,
-      goalReminders: true,
-      ...extraData,
-    });
+  await functions().httpsCallable('createUser')({user, extraData});
   if (!user.emailVerified) {
     await user.sendEmailVerification();
   }
   return user;
-};
-
-const getExercisesQuery = async (
-  level: Level,
-  goal: Goal,
-  warmUp: WarmUp[],
-  coolDown: CoolDown[],
-) => {
-  let warmUpDocs: FirebaseFirestoreTypes.QueryDocumentSnapshot<FirebaseFirestoreTypes.DocumentData>[] =
-    [];
-  let coolDownDocs: FirebaseFirestoreTypes.QueryDocumentSnapshot<FirebaseFirestoreTypes.DocumentData>[] =
-    [];
-  if (warmUp.length) {
-    const warmUpQuery =
-      warmUp.length > 10
-        ? await db().collection('exercises').get()
-        : await db()
-            .collection('exercises')
-            .where('warmUp', 'in', warmUp)
-            .get();
-    warmUpDocs = warmUpQuery.docs.filter(doc =>
-      warmUp.includes(doc.data().warmUp),
-    );
-  }
-  if (coolDown.length) {
-    const coolDownQuery =
-      coolDown.length > 10
-        ? await db().collection('exercises').get()
-        : await db()
-            .collection('exercises')
-            .where('coolDown', 'in', coolDown)
-            .get();
-    coolDownDocs = coolDownQuery.docs.filter(doc =>
-      coolDown.includes(doc.data().coolDown),
-    );
-  }
-  const exercises = await db()
-    .collection('exercises')
-    .where('type', '==', goal)
-    .where('level', '==', level)
-    .get();
-  return [...exercises.docs, ...warmUpDocs, ...coolDownDocs];
 };
 
 export const getExercises = async (
@@ -243,305 +164,99 @@ export const getExercises = async (
   warmUp: WarmUp[],
   coolDown: CoolDown[],
 ) => {
-  const docs = await getExercisesQuery(level, goal, warmUp, coolDown);
-  return docs.reduce((acc: {[id: string]: Exercise}, cur) => {
-    const exercise: any = cur.data();
-    acc[cur.id] = {
-      ...exercise,
-      id: cur.id,
-      createdate: exercise.createdate?.toDate(),
-      lastupdate: exercise.lastupdate?.toDate(),
-    };
-    return acc;
-  }, {});
+  const response = await functions().httpsCallable('getExercises')({
+    level,
+    goal,
+    warmUp,
+    coolDown,
+  });
+  return response.data;
 };
 
 export const getAllExercises = async () => {
-  const snapshot = await db().collection('exercises').get();
-  return snapshot.docs.reduce((acc: {[id: string]: Exercise}, cur) => {
-    const exercise: any = cur.data();
-    acc[cur.id] = {
-      ...exercise,
-      id: cur.id,
-      createdate: exercise.createdate?.toDate(),
-      lastupdate: exercise.lastupdate?.toDate(),
-    };
-    return acc;
-  }, {});
+  const response = await functions().httpsCallable('getAllExercises')();
+  return response.data;
 };
 
 export const getExercisesById = async (ids: string[]) => {
   if (!ids?.length) {
     return [];
   }
-  const validIds = ids.filter(id => id);
-
-  if (validIds.length > 10) {
-    const snapshot = await db().collection('exercises').get();
-    return snapshot.docs
-      .filter(doc => validIds.includes(doc.id))
-      .reduce((acc: {[id: string]: Exercise}, cur) => {
-        const exercise: any = cur.data();
-        acc[cur.id] = {
-          ...exercise,
-          id: cur.id,
-          createdate: exercise.createdate?.toDate(),
-          lastupdate: exercise.lastupdate?.toDate(),
-        };
-        return acc;
-      }, {});
-  } else {
-    const snapshot = await db()
-      .collection('exercises')
-      .where(db.FieldPath.documentId(), 'in', validIds)
-      .get();
-    return snapshot.docs.reduce((acc: {[id: string]: Exercise}, cur) => {
-      const exercise: any = cur.data();
-      acc[cur.id] = {
-        ...exercise,
-        id: cur.id,
-        createdate: exercise.createdate?.toDate(),
-        lastupdate: exercise.lastupdate?.toDate(),
-      };
-      return acc;
-    }, {});
-  }
+  const response = await functions().httpsCallable('getExercisesById')({ids});
+  return response.data;
 };
 
-
 export const getTests = async () => {
-  const snapshot = await db().collection('tests').get();
-  return snapshot.docs.reduce((acc: {[id: string]: Test}, cur) => {
-    const test: any = cur.data();
-    acc[cur.id] = {
-      ...test,
-      id: cur.id,
-      createdate: test.createdate?.toDate(),
-      lastupdate: test.lastupdate?.toDate(),
-    };
-    return acc;
-  }, {});
+  const response = await functions().httpsCallable('getTests')();
+  return response.data;
 };
 
 export const getTestsById = async (ids: string[]) => {
   if (!ids?.length) {
     return [];
   }
-  const validIds = ids.filter(id => id);
-  if (validIds.length > 10) {
-    const snapshot = await db().collection('tests').get();
-    return snapshot.docs
-      .filter(doc => ids.includes(doc.id))
-      .reduce((acc: {[id: string]: Test}, cur) => {
-        const test: any = cur.data();
-        acc[cur.id] = {
-          ...test,
-          id: cur.id,
-          createdate: test.createdate?.toDate(),
-          lastupdate: test.lastupdate?.toDate(),
-        };
-        return acc;
-      }, {});
-  } else {
-    const snapshot = await db()
-      .collection('tests')
-      .where(db.FieldPath.documentId(), 'in', validIds)
-      .get();
-    return snapshot.docs.reduce((acc: {[id: string]: Test}, cur) => {
-      const test: any = cur.data();
-      acc[cur.id] = {
-        ...test,
-        id: cur.id,
-        createdate: test.createdate?.toDate(),
-        lastupdate: test.lastupdate?.toDate(),
-      };
-      return acc;
-    }, {});
-  }
+  const response = await functions().httpsCallable('getTestsById')({ids});
+  return response.data;
 };
 
 export const getQuickRoutines = async () => {
-  const snapshot = await db().collection('quickRoutines').get();
-  return snapshot.docs.reduce((acc: {[id: string]: QuickRoutine}, cur) => {
-    const quickRoutine: any = cur.data();
-    acc[cur.id] = {
-      ...quickRoutine,
-      id: cur.id,
-      createdate: quickRoutine.createdate?.toDate(),
-      lastupdate: quickRoutine.lastupdate?.toDate(),
-    };
-    return acc;
-  }, {});
+  const response = await functions().httpsCallable('getQuickRoutines')();
+  return response.data;
 };
 
 export const getQuickRoutinesById = async (ids: string[]) => {
   if (!ids?.length) {
     return [];
   }
-  const validIds = ids.filter(id => id);
-  if (validIds.length > 10) {
-    const snapshot = await db().collection('quickRoutines').get();
-    return snapshot.docs
-      .filter(doc => ids.includes(doc.id))
-      .reduce((acc: {[id: string]: QuickRoutine}, cur) => {
-        const quickRoutine: any = cur.data();
-        acc[cur.id] = {
-          ...quickRoutine,
-          id: cur.id,
-          createdate: quickRoutine.createdate?.toDate(),
-          lastupdate: quickRoutine.lastupdate?.toDate(),
-        };
-        return acc;
-      }, {});
-  } else {
-    const snapshot = await db()
-      .collection('quickRoutines')
-      .where(db.FieldPath.documentId(), 'in', validIds)
-      .get();
-    return snapshot.docs.reduce((acc: {[id: string]: QuickRoutine}, cur) => {
-      const quickRoutine: any = cur.data();
-      acc[cur.id] = {
-        ...quickRoutine,
-        id: cur.id,
-        createdate: quickRoutine.createdate?.toDate(),
-        lastupdate: quickRoutine.lastupdate?.toDate(),
-      };
-      return acc;
-    }, {});
-  }
+  const response = await functions().httpsCallable('getQuickRoutinesById')({
+    ids,
+  });
+  return response.data;
 };
 
-export const saveWorkout = (workout: SavedWorkout, uid: string) => {
-  return db()
-    .collection('users')
-    .doc(uid)
-    .collection('savedWorkouts')
-    .add(workout);
+export const saveWorkout = (workout: SavedWorkout) => {
+  return functions().httpsCallable('saveWorkout')({workout});
 };
 
-export const saveTest = (test: SavedTest, uid: string) => {
-  return db().collection('users').doc(uid).collection('savedTests').add(test);
+export const saveTest = (test: SavedTest) => {
+  return functions().httpsCallable('saveTest')({test});
 };
 
-export const saveQuickRoutine = (
-  quickRoutine: SavedQuickRoutine,
-  uid: string,
-) => {
-  return db()
-    .collection('users')
-    .doc(uid)
-    .collection('savedQuickRoutines')
-    .add(quickRoutine);
+export const saveQuickRoutine = (quickRoutine: SavedQuickRoutine) => {
+  return functions().httpsCallable('saveQuickRoutine')({quickRoutine});
 };
 
-export const getSavedWorkouts = async (uid: string) => {
-  const savedWorkouts = await db()
-    .collection('users')
-    .doc(uid)
-    .collection('savedWorkouts')
-    .where('saved', '==', true)
-    .orderBy('createdate')
-    .limitToLast(20)
-    .get();
-  return savedWorkouts.docs.reduce((acc: {[id: string]: SavedWorkout}, cur) => {
-    const workout: any = cur.data();
-    acc[cur.id] = {
-      ...workout,
-      id: cur.id,
-      createdate: workout.createdate.toDate(),
-    };
-    return acc;
-  }, {});
+export const getSavedWorkouts = async () => {
+  const response = await functions().httpsCallable('getSavedWorkouts')();
+  return response.data;
 };
 
-export const getSavedTests = async (uid: string) => {
-  const savedTests = await db()
-    .collection('users')
-    .doc(uid)
-    .collection('savedTests')
-    .where('saved', '==', true)
-    .orderBy('createdate')
-    .limitToLast(20)
-    .get();
-  return savedTests.docs.reduce((acc: {[id: string]: SavedTest}, cur) => {
-    const test: any = cur.data();
-    acc[cur.id] = {...test, id: cur.id, createdate: test.createdate.toDate()};
-    return acc;
-  }, {});
+export const getSavedTests = async () => {
+  const response = await functions().httpsCallable('getSavedTests')();
+  return response.data;
 };
 
-export const getSavedQuickRoutines = async (uid: string) => {
-  const savedQuickRoutines = await db()
-    .collection('users')
-    .doc(uid)
-    .collection('savedQuickRoutines')
-    .where('saved', '==', true)
-    .orderBy('createdate')
-    .limitToLast(20)
-    .get();
-  return savedQuickRoutines.docs.reduce(
-    (acc: {[id: string]: SavedQuickRoutine}, cur) => {
-      const routine: any = cur.data();
-      acc[cur.id] = {
-        ...routine,
-        id: cur.id,
-        createdate: routine.createdate.toDate(),
-      };
-      return acc;
-    },
-    {},
-  );
+export const getSavedQuickRoutines = async () => {
+  const response = await functions().httpsCallable('getSavedQuickRoutines')();
+  return response.data;
 };
 
 export const getWeeklyItems = async (uid: string): Promise<WeeklyItems> => {
-  try {
-    const response = await functions().httpsCallable('getWeeklyItems')({uid});
-    const {quickRoutines, tests, workouts} = response.data;
-    return {quickRoutines, tests, workouts};
-  } catch (e) {
-    Snackbar.show({text: 'Error fetching weekly items'});
-    return {quickRoutines: {}, tests: {}, workouts: {}};
-  }
+  const response = await functions().httpsCallable('getWeeklyItems')({uid});
+  return response.data;
 };
 
 export const getEducation = async () => {
-  const education = await db().collection('education').get();
-  return education.docs.reduce((acc: {[id: string]: Education}, cur) => {
-    const edu: any = cur.data();
-    acc[cur.id] = {...edu, id: cur.id, createdate: edu.createdate.toDate()};
-    return acc;
-  }, {});
+  const response = await functions().httpsCallable('getEducation')();
+  return response.data;
 };
 
 export const getEducationById = async (ids: string[]) => {
   if (!ids?.length) {
     return [];
   }
-  const validIds = ids.filter(id => id);
-  if (validIds.length > 10) {
-    const snapshot = await db().collection('education').get();
-    return snapshot.docs
-      .filter(doc => ids.includes(doc.id))
-      .reduce((acc: {[id: string]: Education}, cur) => {
-        const test: any = cur.data();
-        acc[cur.id] = {
-          ...test,
-          id: cur.id,
-          createdate: test.createdate.toDate(),
-        };
-        return acc;
-      }, {});
-  } else {
-    const snapshot = await db()
-      .collection('education')
-      .where(db.FieldPath.documentId(), 'in', validIds)
-      .get();
-    return snapshot.docs.reduce((acc: {[id: string]: Education}, cur) => {
-      const test: any = cur.data();
-      acc[cur.id] = {...test, id: cur.id, createdate: test.createdate.toDate()};
-      return acc;
-    }, {});
-  }
+  const response = await functions().httpsCallable('getEducationById')({ids});
+  return response.data;
 };
 
 export const generateLink = async () => {
@@ -560,81 +275,26 @@ export const acceptInviteLink = async (value: string) => {
   return response.data.user;
 };
 
-export const setFCMToken = (uid: string, FCMToken: string) => {
-  return db().collection('users').doc(uid).update({FCMToken});
+export const setFCMToken = (FCMToken: string) => {
+  return functions().httpsCallable('setFCMToken')({FCMToken});
 };
 
-export const getConnections = async (uid: string) => {
-  // const response = await functions().httpsCallable('getConnections')();
-  // return response.data.users;
-  const connections = await db()
-    .collection('users')
-    .doc(uid)
-    .collection('connections')
-    .get();
-  const uids = connections.docs.map(doc => doc.data().uid);
-  if (uids.length) {
-    const users: {[uid: string]: Profile} = {};
-    const uidArrays = chunkArrayInGroups(uids, 10);
-    for (let i = 0; i < uidArrays.length; i++) {
-      const arr = uidArrays[i];
-      const userData = await db()
-        .collection('users')
-        .where(db.FieldPath.documentId(), 'in', arr)
-        .get();
-      userData.docs.forEach(doc => {
-        const user: any = doc.data();
-        users[doc.id] = user;
-      });
-    }
-
-    return users;
-  }
-  return {};
+export const getConnections = async () => {
+  const response = await functions().httpsCallable('getConnections')();
+  return response.data.users;
 };
 
-export const getChats = async (uid: string) => {
-  const idQuery = await db()
-    .collection('users')
-    .doc(uid)
-    .collection('chats')
-    .get();
-  const ids = idQuery.docs.map(chat => chat.data().id);
-  if (ids.length) {
-    const idArrays = chunkArrayInGroups(ids, 10);
-    const chats: {[key: string]: Chat} = {};
-    for (let i = 0; i < idArrays.length; i++) {
-      const arr = idArrays[i];
-      const chatsData = await db()
-        .collection('chats')
-        .where(db.FieldPath.documentId(), 'in', arr)
-        .get();
-      chatsData.docs.forEach(doc => {
-        const otherUid = doc.data().users.find((id: string) => id !== uid);
-        const chat: any = {id: doc.id, ...doc.data()};
-        chats[otherUid] = chat;
-      }, {});
-    }
-
-    return chats;
-  }
-  return {};
+export const getChats = async () => {
+  const response = await functions().httpsCallable('getChats')();
+  return response.data.users;
 };
 
 export const getMessages = async (chatId: string, startAfter: number) => {
-  const query = await db()
-    .collection('chats')
-    .doc(chatId)
-    .collection('messages')
-    .orderBy('createdAt')
-    .where('createdAt', '<', startAfter)
-    .limitToLast(20)
-    .get();
-  return query.docs.reduce((acc: {[id: string]: Message}, cur) => {
-    const message: any = cur.data();
-    acc[message ? message._id : cur.id] = {...message, id: cur.id};
-    return acc;
-  }, {});
+  const response = await functions().httpsCallable('getMessages')({
+    chatId,
+    startAfter,
+  });
+  return response.data;
 };
 
 export const sendMessage = (
@@ -645,19 +305,44 @@ export const sendMessage = (
   return functions().httpsCallable('sendMessage')({message, chatId, userId});
 };
 
-export const setUnread = (uid: string, unread: {[key: string]: number}) => {
-  return db().collection('users').doc(uid).update({unread});
+export const setUnread = (unread: {[key: string]: number}) => {
+  return functions().httpsCallable('setUnread')({unread});
 };
 
 export const getSettings = async () => {
-  const snapshot = await db().collection('settings').get();
-  return snapshot.docs[0].data();
+  const response = await functions().httpsCallable('getSettings')();
+  return response.data;
 };
 
-export const sendFeedback = async (
-  uid: string,
-  feedback: string,
-  rating: number,
-) => {
-  return db().collection('feedback').doc(uid).set({feedback, rating});
+export const sendFeedback = async (feedback: string, rating: number) => {
+  return functions().httpsCallable('sendFeedback')({feedback, rating});
+};
+
+export const getBodyFatPercentageSamples = async () => {
+  const response = await functions().httpsCallable(
+    'getBodyFatPercentageSamples',
+  )();
+  return response.data;
+};
+
+export const saveBodyFatPercentage = async (value: number) => {
+  return functions().httpsCallable('saveBodyFatPercentage')({value});
+};
+
+export const getMuscleMassSamples = async () => {
+  const response = await functions().httpsCallable('getMuscleMassSamples')();
+  return response.data;
+};
+
+export const saveMuscleMass = (value: number) => {
+  return functions().httpsCallable('saveMuscleMass')({value});
+};
+
+export const getBoneMassSamples = async () => {
+  const response = await functions().httpsCallable('getBoneMassSamples')();
+  return response.data;
+};
+
+export const saveBoneMass = (value: number) => {
+  return functions().httpsCallable('saveBoneMass')({value});
 };

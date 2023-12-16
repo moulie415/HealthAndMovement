@@ -74,7 +74,7 @@ export function* saveWorkout(action: SaveWorkoutAction) {
       (state: MyRootState) => state.profile,
     );
 
-    yield call(api.saveWorkout, action.payload, profile.uid);
+    yield call(api.saveWorkout, action.payload);
     if (action.payload.saved) {
       yield call(Snackbar.show, {text: 'Workout saved'});
     }
@@ -104,11 +104,9 @@ export function* saveWorkout(action: SaveWorkoutAction) {
 
 function* getSavedWorkouts() {
   try {
-    const {uid} = yield select((state: MyRootState) => state.profile.profile);
     yield put(setLoading(true));
     const workouts: {[key: string]: SavedWorkout} = yield call(
       api.getSavedWorkouts,
-      uid,
     );
     yield put(setSavedWorkouts(workouts));
     const exercises: {[key: string]: Exercise} = yield select(

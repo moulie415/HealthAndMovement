@@ -31,8 +31,7 @@ export function* getTests() {
 
 function* saveTest(action: SaveTestAction) {
   try {
-    const {uid} = yield select((state: MyRootState) => state.profile.profile);
-    yield call(api.saveTest, action.payload, uid);
+    yield call(api.saveTest, action.payload);
     if (action.payload.saved) {
       yield call(Snackbar.show, {text: 'Test saved'});
     }
@@ -45,11 +44,9 @@ function* saveTest(action: SaveTestAction) {
 function* getSavedTests() {
   try {
     yield put(setLoading(true));
-    const {uid} = yield select((state: MyRootState) => state.profile.profile);
 
     const savedTests: {[key: string]: SavedTest} = yield call(
       api.getSavedTests,
-      uid,
     );
     yield put(setSavedTests(savedTests));
     const tests: {[key: string]: Test} = yield select(

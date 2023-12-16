@@ -37,7 +37,7 @@ function* saveQuickRoutine(action: SaveQuickRoutineAction) {
     const {profile, weeklyItems}: ProfileState = yield select(
       (state: MyRootState) => state.profile,
     );
-    yield call(api.saveQuickRoutine, action.payload, profile.uid);
+    yield call(api.saveQuickRoutine, action.payload);
     if (action.payload.saved) {
       yield call(Snackbar.show, {text: 'Workout saved '});
     }
@@ -67,10 +67,8 @@ function* saveQuickRoutine(action: SaveQuickRoutineAction) {
 export function* getSavedQuickRoutines() {
   try {
     yield put(setLoading(true));
-    const {uid} = yield select((state: MyRootState) => state.profile.profile);
     const savedQuickRoutines: {[key: string]: SavedQuickRoutine} = yield call(
       api.getSavedQuickRoutines,
-      uid,
     );
     yield put(setSavedQuickRoutine(savedQuickRoutines));
     const quickRoutines: {[key: string]: QuickRoutine} = yield select(

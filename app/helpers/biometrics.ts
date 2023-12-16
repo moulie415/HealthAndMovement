@@ -7,11 +7,11 @@ import GoogleFit, {
 } from 'react-native-google-fit';
 import moment from 'moment';
 import {googleFitOptions, healthKitOptions} from '../constants/strings';
-import Profile, {Gender, Unit} from '../types/Profile';
-import {PlanWorkout, StepSample} from '../types/Shared';
+import {Gender, Unit} from '../types/Profile';
+import {StepSample} from '../types/Shared';
 import {logError} from './error';
 import db from '@react-native-firebase/firestore';
-import {getCaloriesBurned} from './exercises';
+import * as api from './api';
 
 export const isAvailable = () => {
   if (Platform.OS === 'ios') {
@@ -510,7 +510,7 @@ export const saveWorkout = async (
   }
 };
 
-export const getBodyFatPercentageSamples = async (uid: string) => {
+export const getBodyFatPercentageSamples = async () => {
   if (Platform.OS === 'ios') {
     return new Promise((resolve, reject) => {
       AppleHealthKit.getBodyFatPercentageSamples(
@@ -532,29 +532,12 @@ export const getBodyFatPercentageSamples = async (uid: string) => {
       );
     });
   } else {
-    const samples = await db()
-      .collection('users')
-      .doc(uid)
-      .collection('bodyFatPercentage')
-      .where('createdate', '>=', moment().subtract(1, 'year').toDate())
-      .get();
-    return samples.docs.map(doc => {
-      const data = doc.data();
-      return {
-        startDate: data.createdate,
-        endDate: data.createdate,
-        value: data.value,
-      };
-    });
+    return api.getBodyFatPercentageSamples();
   }
 };
 
-export const saveBodyFatPercentage = async (value: number, uid: string) => {
-  await db()
-    .collection('users')
-    .doc(uid)
-    .collection('bodyFatPercentage')
-    .add({value, createdate: new Date()});
+export const saveBodyFatPercentage = async (value: number) => {
+  await api.saveBodyFatPercentage(value);
   if (Platform.OS === 'ios') {
     return new Promise((resolve, reject) => {
       AppleHealthKit.saveBodyFatPercentage({value}, (e, result) => {
@@ -568,52 +551,18 @@ export const saveBodyFatPercentage = async (value: number, uid: string) => {
   }
 };
 
-export const getMuscleMassSamples = async (uid: string) => {
-  const samples = await db()
-    .collection('users')
-    .doc(uid)
-    .collection('muscleMass')
-    .where('createdate', '>=', moment().subtract(1, 'year').toDate())
-    .get();
-  return samples.docs.map(doc => {
-    const data = doc.data();
-    return {
-      startDate: data.createdate,
-      endDate: data.createdate,
-      value: data.value,
-    };
-  });
+export const getMuscleMassSamples = async () => {
+  return api.getMuscleMassSamples();
 };
 
-export const saveMuscleMass = (value: number, uid: string) => {
-  return db()
-    .collection('users')
-    .doc(uid)
-    .collection('muscleMass')
-    .add({value, createdate: new Date()});
+export const saveMuscleMass = (value: number) => {
+  return api.saveMuscleMass(value);
 };
 
-export const getBoneMassSamples = async (uid: string) => {
-  const samples = await db()
-    .collection('users')
-    .doc(uid)
-    .collection('boneMass')
-    .where('createdate', '>=', moment().subtract(1, 'year').toDate())
-    .get();
-  return samples.docs.map(doc => {
-    const data = doc.data();
-    return {
-      startDate: data.createdate,
-      endDate: data.createdate,
-      value: data.value,
-    };
-  });
+export const getBoneMassSamples = async () => {
+  return api.getBoneMassSamples();
 };
 
-export const saveBoneMass = (value: number, uid: string) => {
-  return db()
-    .collection('users')
-    .doc(uid)
-    .collection('boneMass')
-    .add({value, createdate: new Date()});
+export const saveBoneMass = (value: number) => {
+  return api.saveBoneMass(value);
 };

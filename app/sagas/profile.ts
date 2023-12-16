@@ -125,7 +125,6 @@ type Snapshot =
   FirebaseFirestoreTypes.QuerySnapshot<FirebaseFirestoreTypes.DocumentData>;
 
 function* getSamplesWorker() {
-  const {uid} = yield select((state: MyRootState) => state.profile.profile);
   const weightSamples: Sample[] = yield call(getWeightSamples, 'metric');
   yield put(setWeightSamples(weightSamples));
 
@@ -134,15 +133,14 @@ function* getSamplesWorker() {
 
   const bodyFatPercentageSamples: Sample[] = yield call(
     getBodyFatPercentageSamples,
-    uid,
   );
 
   yield put(setBodyFatPercentageSamples(bodyFatPercentageSamples));
 
-  const muscleMassSamples: Sample[] = yield call(getMuscleMassSamples, uid);
+  const muscleMassSamples: Sample[] = yield call(getMuscleMassSamples);
   yield put(setMuscleMassSamples(muscleMassSamples));
 
-  const boneMassSamples: Sample[] = yield call(getBoneMassSamples, uid);
+  const boneMassSamples: Sample[] = yield call(getBoneMassSamples);
   yield put(setBoneMassSamples(boneMassSamples));
 
   // const stepSamples: StepSample[] = yield call(getStepSamples);
@@ -202,7 +200,6 @@ function* updateProfile(action: UpdateProfileAction) {
   yield put(setLoading(true));
   try {
     try {
-      const {uid} = yield select((state: MyRootState) => state.profile.profile);
       const enabled: boolean = yield call(isEnabled);
       if (enabled) {
         if (weight) {
@@ -212,13 +209,13 @@ function* updateProfile(action: UpdateProfileAction) {
           yield call(saveHeight, height, 'metric');
         }
         if (bodyFatPercentage !== undefined) {
-          yield call(saveBodyFatPercentage, bodyFatPercentage, uid);
+          yield call(saveBodyFatPercentage, bodyFatPercentage);
         }
         if (muscleMass !== undefined) {
-          yield call(saveMuscleMass, muscleMass, uid);
+          yield call(saveMuscleMass, muscleMass);
         }
         if (boneMass !== undefined) {
-          yield call(saveBoneMass, boneMass, uid);
+          yield call(saveBoneMass, boneMass);
         }
       }
     } catch (e) {
@@ -249,7 +246,7 @@ function* updateProfile(action: UpdateProfileAction) {
       ...profile,
       ...action.payload,
     };
-    yield call(api.updateUser, updateObj, profile.uid);
+    yield call(api.updateUser, updateObj);
     yield put(setProfile(updateObj));
     yield call(Snackbar.show, {text: 'Profile updated'});
     setUserAttributes({
@@ -286,16 +283,12 @@ function* signUp(action: SignUpAction) {
     }
 
     const {profile} = yield select((state: MyRootState) => state.profile);
-    yield call(
-      api.updateUser,
-      {
-        ...profile,
-        signedUp: true,
-        ...action.payload,
-        signUpDate: moment().unix(),
-      },
-      profile.uid,
-    );
+    yield call(api.updateUser, {
+      ...profile,
+      signedUp: true,
+      ...action.payload,
+      signUpDate: moment().unix(),
+    });
     yield put(
       setProfile({
         ...profile,
@@ -472,11 +465,9 @@ function* getWeeklyItemsForConnection(action: GetWeeklyItemsForConnection) {
 
 function* getConnections() {
   try {
-    const {uid} = yield select((state: MyRootState) => state.profile.profile);
     yield put(setLoading(true));
     const connections: {[key: string]: Profile} = yield call(
       api.getConnections,
-      uid,
     );
     const currentUnread: {[key: string]: number} = yield select(
       (state: MyRootState) => state.profile.profile.unread,
@@ -493,11 +484,11 @@ function* getConnections() {
         return acc;
       }, {});
       if (!_.isEqual(currentUnread, newUnread)) {
-        yield call(api.setUnread, uid, newUnread);
+        yield call(api.setUnread, newUnread);
         yield put(setUnread(newUnread));
       }
     }
-    const chats: {[key: string]: Chat} = yield call(api.getChats, uid);
+    const chats: {[key: string]: Chat} = yield call(api.getChats);
     yield put(setChats(chats));
     yield put(setConnections(connections));
     yield put(setLoading(false));
@@ -576,13 +567,12 @@ function* sendMessage(action: SendMessageAction) {
 function* setRead(action: SetReadAction) {
   try {
     const otherUid = action.payload;
-    const {uid} = yield select((state: MyRootState) => state.profile.profile);
     const current: {[key: string]: number} = yield select(
       (state: MyRootState) => state.profile.profile.unread,
     );
     if (current) {
       const unread = {...current, [otherUid]: 0};
-      yield call(api.setUnread, uid, unread);
+      yield call(api.setUnread, unread);
       yield put(setUnread(unread));
     }
   } catch (e) {
@@ -617,11 +607,11 @@ function* premiumUpdatedWorker() {
       (state: MyRootState) => state.profile.profile.premium,
     );
     yield take(SET_PREMIUM);
-    const {premium, uid} = yield select(
+    const {premium} = yield select(
       (state: MyRootState) => state.profile.profile,
     );
     if (!_.isEqual(oldPremium, premium)) {
-      yield call(api.updateUser, {premium}, uid);
+      yield call(api.updateUser, {premium});
     }
   }
 }
@@ -637,7 +627,6 @@ function* handleAuthWorker(action: HandleAuthAction) {
     ) {
       const doc: FirebaseFirestoreTypes.DocumentSnapshot = yield call(
         api.getUser,
-        user.uid,
       );
 
       if (doc.exists) {
@@ -756,7 +745,7 @@ function* handleAuthWorker(action: HandleAuthAction) {
           if (enabled) {
             try {
               const FCMToken = await messaging().getToken();
-              api.setFCMToken(user.uid, FCMToken);
+              api.setFCMToken(FCMToken);
             } catch (e) {
               logError(e);
             }

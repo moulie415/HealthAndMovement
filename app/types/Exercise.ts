@@ -1,4 +1,4 @@
-import { Area } from './QuickRoutines';
+import {Area} from './QuickRoutines';
 import {
   Level,
   Goal,

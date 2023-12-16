@@ -17,6 +17,7 @@ import {MyRootState} from '../../types/Shared';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {StackParamList} from '../../App';
 import {FirebaseAuthTypes} from '@react-native-firebase/auth';
+import {logError} from '../../helpers/error';
 
 const SignUp: React.FC<{
   navigation: NativeStackNavigationProp<StackParamList, 'SignUp'>;
@@ -53,6 +54,7 @@ const SignUp: React.FC<{
       const user = await createUser(email, password, {name, surname});
       handleAuthAction(user);
     } catch (e) {
+      logError(e);
       setLoading(false);
       // @ts-ignore
       Alert.alert('Error', e.message);
