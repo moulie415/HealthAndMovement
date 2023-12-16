@@ -625,12 +625,10 @@ function* handleAuthWorker(action: HandleAuthAction) {
         (user.providerData?.[0] &&
           user.providerData?.[0].providerId !== 'password'))
     ) {
-      const doc: FirebaseFirestoreTypes.DocumentSnapshot = yield call(
-        api.getUser,
-      );
+      const doc: Profile | undefined = yield call(api.getUser);
 
-      if (doc.exists) {
-        yield put(setProfile(doc.data() as Profile));
+      if (doc) {
+        yield put(setProfile(doc));
       } else {
         const avatar = getProfileImage(user);
         const reminderTime = new Date(
@@ -685,10 +683,10 @@ function* handleAuthWorker(action: HandleAuthAction) {
         providerId: user.providerData[0].providerId,
         premium: customerInfo.entitlements.active.Premium ? 'true' : 'false',
         uid: user.uid || '',
-        name: doc.exists ? doc.data()?.name || '' : '',
-        surname: doc.exists ? doc.data()?.surname || '' : '',
+        name: doc ? doc.name || '' : '',
+        surname: doc ? doc?.surname || '' : '',
       });
-      if (doc.exists && doc.data()?.signedUp) {
+      if (doc && doc?.signedUp) {
         const available: boolean = yield call(isAvailable);
         if (available) {
           yield call(initBiometrics);
@@ -720,8 +718,8 @@ function* handleAuthWorker(action: HandleAuthAction) {
         const {premium} = yield select(
           (state: MyRootState) => state.profile.profile,
         );
-        if (doc.data()?.unread && premium) {
-          yield put(setUnread(doc.data()?.unread));
+        if (doc?.unread && premium) {
+          yield put(setUnread(doc?.unread));
         }
       } else {
         navigate('SignUpFlow');
