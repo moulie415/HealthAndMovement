@@ -6,10 +6,10 @@
 	<string>app-store</string>
 	<key>teamID</key>
 	<string>27RJG57PEM</string>
-	<key>uploadBitcode</key>
+	<!-- <key>uploadBitcode</key>
 	<true/>
 	<key>compileBitcode</key>
-	<true/>
+	<true/> -->
 	<key>uploadSymbols</key>
 	<true/>
 	<key>signingStyle</key>

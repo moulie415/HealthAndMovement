@@ -7,7 +7,7 @@ on:
 
 jobs:
   deploy:
-    runs-on: macos-12
+    runs-on: macos-13
 
     steps:
       - uses: maxim-lobanov/setup-xcode@v1
@@ -43,35 +43,59 @@ jobs:
           FACEBOOK_CLIENT_TOKEN: ${{ secrets.FACEBOOK_CLIENT_TOKEN }}
           ROOT_API_URL: ${{ secrets.ROOT_API_URL }}
         run: |
-          exec .github/scripts/create-env.sh
+          echo REVENUE_CAT_IOS_KEY=$REVENUE_CAT_IOS_KEY >> .env
+          echo REVENUE_CAT_ANDROID_KEY=$REVENUE_CAT_ANDROID_KEY >> .env
+          echo FACEBOOK_APP_ID=$FACEBOOK_APP_ID >> .env
+          echo INSTABUG_DEV_TOKEN=$INSTABUG_DEV_TOKEN >> .env
+          echo INSTABUG_PROD_TOKEN=$INSTABUG_PROD_TOKEN >> .env
+          echo ROOT_API_URL=$ROOT_API_URL >> .env
+          echo -n FACEBOOK_CLIENT_TOKEN=$FACEBOOK_CLIENT_TOKEN >> .env
       - name: Install npm dependencies
         run: |
           yarn
       - name: Run tests
         run: |
           yarn test
-      - name: Set environment variables from project settings
-        env:
-          ACTIONS_ALLOW_UNSECURE_COMMANDS: true
-        run: |
-          exec .github/scripts/set-env-from-xcodeproj.sh
-      - name: Import signing certificate
+      - name: Install certificates
         env:
           SIGNING_CERTIFICATE_P12_DATA: ${{ secrets.SIGNING_CERTIFICATE_P12_DATA }}
           SIGNING_CERTIFICATE_P12_DATA_DEV: ${{ secrets.SIGNING_CERTIFICATE_P12_DATA_DEV }}
-          #SIGNING_CERTIFICATE_PASSWORD: ${{ secrets.SIGNING_CERTIFICATE_PASSWORD }}
         run: |
-          exec .github/scripts/import-certificate.sh
-      - name: Import provisioning profile
+          # create variables
+          CERTIFICATE_PATH=$RUNNER_TEMP/build_certificate.p12
+          CERTIFICATE_PATH_DEV=$RUNNER_TEMP/build_certificate_dev.p12
+
+          KEYCHAIN_PATH=$RUNNER_TEMP/app-signing.keychain-db
+
+          # import certificate and provisioning profile from secrets
+          echo -n "$SIGNING_CERTIFICATE_P12_DATA" | base64 --decode -o $CERTIFICATE_PATH
+          echo -n "$SIGNING_CERTIFICATE_P12_DATA_DEV" | base64 --decode -o $CERTIFICATE_PATH_DEV
+
+          # create temporary keychain
+          security create-keychain -p "" $KEYCHAIN_PATH
+          security set-keychain-settings -lut 21600 $KEYCHAIN_PATH
+          security unlock-keychain -p "" $KEYCHAIN_PATH
+
+          # import certificate to keychain
+          security import $CERTIFICATE_PATH -P "" -A -t cert -f pkcs12 -k $KEYCHAIN_PATH
+          security import $CERTIFICATE_PATH_DEV -P "" -A -t cert -f pkcs12 -k $KEYCHAIN_PATH
+          security list-keychain -d user -s $KEYCHAIN_PATH
+      - name: Import provisisioning profiles
         env:
           PROVISIONING_PROFILE_DATA: ${{ secrets.PROVISIONING_PROFILE_DATA }}
           PROVISIONING_PROFILE_DATA_DEV: ${{ secrets.PROVISIONING_PROFILE_DATA_DEV }}
           WATCH_APP_PROVISIONING_PROFILE_DATA: ${{ secrets.WATCH_APP_PROVISIONING_PROFILE_DATA }}
-          WATCH_APP_EXTENSION_PROVISIONING_PROFILE_DATA: ${{ secrets.WATCH_APP_EXTENSION_PROVISIONING_PROFILE_DATA }}
           WATCH_APP_PROVISIONING_PROFILE_DATA_DEV: ${{ secrets.WATCH_APP_PROVISIONING_PROFILE_DATA_DEV }}
+          WATCH_APP_EXTENSION_PROVISIONING_PROFILE_DATA: ${{ secrets.WATCH_APP_EXTENSION_PROVISIONING_PROFILE_DATA }}
           WATCH_APP_EXTENSION_PROVISIONING_PROFILE_DATA_DEV: ${{ secrets.WATCH_APP_EXTENSION_PROVISIONING_PROFILE_DATA_DEV }}
         run: |
-          exec .github/scripts/import-profile.sh
+          mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
+          echo "$WATCH_APP_PROVISIONING_PROFILE_DATA" | base64 --decode > ~/Library/MobileDevice/Provisioning\ Profiles/profileWatch.mobileprovision
+          echo "$WATCH_APP_EXTENSION_PROVISIONING_PROFILE_DATA" | base64 --decode > ~/Library/MobileDevice/Provisioning\ Profiles/profileWatchExtension.mobileprovision
+          echo "$WATCH_APP_PROVISIONING_PROFILE_DATA_DEV" | base64 --decode > ~/Library/MobileDevice/Provisioning\ Profiles/profileWatchDev.mobileprovision
+          echo "$WATCH_APP_EXTENSION_PROVISIONING_PROFILE_DATA_DEV" | base64 --decode > ~/Library/MobileDevice/Provisioning\ Profiles/profileWatchExtensionDev.mobileprovision
+          echo "$PROVISIONING_PROFILE_DATA" | base64 --decode > ~/Library/MobileDevice/Provisioning\ Profiles/profile.mobileprovision
+          echo "$PROVISIONING_PROFILE_DATA_DEV" | base64 --decode > ~/Library/MobileDevice/Provisioning\ Profiles/profileDev.mobileprovision
       - name: Set up prod environment
         env:
           GOOGLE_SERVICE_INFO: ${{ secrets.GOOGLE_SERVICE_INFO }}
@@ -92,28 +116,13 @@ jobs:
           xcodebuild build -workspace HealthAndMovement.xcworkspace -scheme HealthAndMovement
           xcodebuild archive -workspace HealthAndMovement.xcworkspace -scheme HealthAndMovement -archivePath archive.xcarchive
           xcodebuild -exportArchive -archivePath archive.xcarchive -exportPath . -exportOptionsPlist exportOptions.plist
-        #sudo gem install fastlane
-        #fastlane gym --workspace "HealthAndMovement.xcworkspace" --scheme "HealthAndMovement" --clean
-      - name: Upload build artifacts
-        uses: actions/upload-artifact@v2
-        with:
-          name: build.log
-          path: ~/Library/Logs/gym/*.log
-      - name: Upload release assets
-        if: startsWith(github.ref, 'refs/tags/v')
-        uses: softprops/action-gh-release@v1
-        with:
-          files: |
-            ios/${{ env.PRODUCT_NAME }}.ipa
-            ios/${{ env.PRODUCT_NAME }}.app.dSYM.zip
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
       - name: Upload app to App Store Connect
         env:
           APP_STORE_CONNECT_USERNAME: ${{ secrets.APP_STORE_CONNECT_USERNAME }}
           APP_STORE_CONNECT_PASSWORD: ${{ secrets.APP_STORE_CONNECT_PASSWORD }}
         run: |
+          ls
+          ls ios
           xcrun altool --upload-app -t ios -f "ios/$PRODUCT_NAME.ipa" -u "$APP_STORE_CONNECT_USERNAME" -p "$APP_STORE_CONNECT_PASSWORD"
       - name: Setup Sentry CLI
         uses: mathieu-bour/setup-sentry-cli@v1
@@ -126,4 +135,9 @@ jobs:
         env:
           SENTRY_TOKEN: ${{ secrets.SENTRY_TOKEN }}
         run: |
-          exec .github/scripts/upload-dsym.sh
+          ls
+          DSYM=$(find ios/archive.xcarchive/dSYMs -name "*.dSYM")
+          echo $DSYM
+          ls
+          sentry-cli --auth-token $SENTRY_TOKEN upload-dif --org henry-moule --project health-and-movement $DSYM
+          # ios/Pods/FirebaseCrashlytics/upload-symbols -gsp ios/HealthAndMovement/GoogleService-Info.plist -p ios $DSYM

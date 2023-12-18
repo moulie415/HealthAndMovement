@@ -18,6 +18,10 @@ jobs:
         with:
           path: node_modules
           key: ${{ hashFiles('yarn.lock') }}
+      - uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: '17'
       - name: Install npm dependencies
         run: |
           yarn
@@ -37,7 +41,13 @@ jobs:
           FACEBOOK_CLIENT_TOKEN: ${{ secrets.FACEBOOK_CLIENT_TOKEN }}
           ROOT_API_URL: ${{ secrets.ROOT_API_URL }}
         run: |
-          exec .github/scripts/create-env.sh
+          echo REVENUE_CAT_IOS_KEY=$REVENUE_CAT_IOS_KEY >> .env
+          echo REVENUE_CAT_ANDROID_KEY=$REVENUE_CAT_ANDROID_KEY >> .env
+          echo FACEBOOK_APP_ID=$FACEBOOK_APP_ID >> .env
+          echo INSTABUG_DEV_TOKEN=$INSTABUG_DEV_TOKEN >> .env
+          echo INSTABUG_PROD_TOKEN=$INSTABUG_PROD_TOKEN >> .env
+          echo ROOT_API_URL=$ROOT_API_URL >> .env
+          echo -n FACEBOOK_CLIENT_TOKEN=$FACEBOOK_CLIENT_TOKEN >> .env
       - name: Bump version
         uses: chkfung/android-version-actions@v1.2
         with:
@@ -52,9 +62,17 @@ jobs:
           MYAPP_UPLOAD_KEY_PASSWORD: ${{ secrets.MYAPP_UPLOAD_KEY_PASSWORD }}
           KEYSTORE_DATA: ${{ secrets.KEYSTORE_DATA }}
         run: |
-          exec .github/scripts/bundle-release.sh
+          cd android/app
+          echo $GOOGLE_SERVICES_JSON >> google-services.json
+          echo $KEYSTORE_DATA | base64 --decode > healthandmovement.keystore
+          cd ..
+          echo "MYAPP_UPLOAD_KEY_ALIAS=$MYAPP_UPLOAD_KEY_ALIAS" >> gradle.properties
+          echo "MYAPP_UPLOAD_STORE_FILE=$MYAPP_UPLOAD_STORE_FILE" >> gradle.properties
+          echo "MYAPP_UPLOAD_STORE_PASSWORD=$MYAPP_UPLOAD_STORE_PASSWORD" >> gradle.properties
+          echo "MYAPP_UPLOAD_KEY_PASSWORD=$MYAPP_UPLOAD_KEY_PASSWORD" >> gradle.properties
+          ./gradlew bundleRelease
       - name: upload bundle to Google Play
-        uses: r0adkll/upload-google-play@v1.0.15
+        uses: r0adkll/upload-google-play@v1
         with:
           serviceAccountJsonPlainText: ${{secrets.SERVICE_ACCOUNT_JSON}}
           packageName: com.healthandmovement
