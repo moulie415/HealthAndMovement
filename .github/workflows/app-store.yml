@@ -100,7 +100,8 @@ jobs:
         env:
           GOOGLE_SERVICE_INFO: ${{ secrets.GOOGLE_SERVICE_INFO }}
         run: |
-          exec .github/scripts/setup-env.sh
+          cd ios/HealthAndMovement
+          echo $GOOGLE_SERVICE_INFO >> GoogleService-Info.plist
       - uses: yanamura/ios-bump-version@v1.7.0
         with:
           build-number: ${{github.run_number}}
@@ -121,9 +122,7 @@ jobs:
           APP_STORE_CONNECT_USERNAME: ${{ secrets.APP_STORE_CONNECT_USERNAME }}
           APP_STORE_CONNECT_PASSWORD: ${{ secrets.APP_STORE_CONNECT_PASSWORD }}
         run: |
-          ls
-          ls ios
-          xcrun altool --upload-app -t ios -f "ios/$PRODUCT_NAME.ipa" -u "$APP_STORE_CONNECT_USERNAME" -p "$APP_STORE_CONNECT_PASSWORD"
+          xcrun altool --upload-app -t ios -f "ios/CA Health.ipa" -u "$APP_STORE_CONNECT_USERNAME" -p "$APP_STORE_CONNECT_PASSWORD"
       - name: Setup Sentry CLI
         uses: mathieu-bour/setup-sentry-cli@v1
         with:
