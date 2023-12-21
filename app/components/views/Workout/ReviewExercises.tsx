@@ -11,7 +11,6 @@ import ReviewExercisesProps from '../../../types/views/ReviewExercises';
 import {truncate} from '../../../helpers';
 import {MyRootState} from '../../../types/Shared';
 import {connect} from 'react-redux';
-import {setWorkout} from '../../../actions/exercises';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 
 import ShareModal from '../../commons/ShareModal';
@@ -24,6 +23,7 @@ import Profile from '../../../types/Profile';
 import {SettingsState} from '../../../reducers/settings';
 import {StackParamList} from '../../../App';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import { setWorkout } from '../../../reducers/exercises';
 
 const ReviewExercises: React.FC<{
   workout: Exercise[];

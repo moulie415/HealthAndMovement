@@ -2,10 +2,10 @@ import React, {FunctionComponent} from 'react';
 import {TouchableOpacity} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import {connect} from 'react-redux';
-import {setShareModalVisible} from '../../actions/exercises';
 import colors from '../../constants/colors';
 
 import {MyRootState} from '../../types/Shared';
+import {setShareModalVisible} from '../../reducers/exercises';
 
 const HeaderShareButton: FunctionComponent<{
   setShareModalVisibleAction: (payload: boolean) => void;

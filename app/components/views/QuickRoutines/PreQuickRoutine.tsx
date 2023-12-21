@@ -12,7 +12,7 @@ import Text from '../../commons/Text';
 import colors from '../../../constants/colors';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import {Dimensions, StyleSheet, View} from 'react-native';
-import {MyRootState} from '../../../types/Shared';
+import {MyRootState, UpdateProfilePayload} from '../../../types/Shared';
 import {connect} from 'react-redux';
 import Exercise from '../../../types/Exercise';
 import {getEquipmentList} from '../../../helpers/exercises';
@@ -21,7 +21,7 @@ import convertToProxyURL from 'react-native-video-cache';
 import Spinner from '../../commons/Spinner';
 import ConnectedApps from '../../commons/ConnectedApps';
 import Toggle from '../../commons/Toggle';
-import {UpdateProfilePayload, updateProfile} from '../../../actions/profile';
+import {updateProfile} from '../../../reducers/profile';
 
 const PreQuickRoutine: React.FC<{
   navigation: NativeStackNavigationProp<StackParamList, 'PreQuickRoutine'>;

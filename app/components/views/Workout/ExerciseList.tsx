@@ -5,17 +5,45 @@ import Image from 'react-native-fast-image';
 import {connect} from 'react-redux';
 import colors from '../../../constants/colors';
 import Exercise from '../../../types/Exercise';
-import {Equipment, MyRootState} from '../../../types/Shared';
-import ExerciseListProps from '../../../types/views/ExerciseList';
-import {getExercises, setWorkout} from '../../../actions/exercises';
+import {
+  CoolDown,
+  Equipment,
+  Goal,
+  Level,
+  MyRootState,
+  WarmUp,
+} from '../../../types/Shared';
 import {truncate} from '../../../helpers';
 import AbsoluteSpinner from '../../commons/AbsoluteSpinner';
-
 import {FlatList} from 'react-native-gesture-handler';
 import Text from '../../commons/Text';
 import ListItem from '../../commons/ListItem';
+import {getExercises, setWorkout} from '../../../reducers/exercises';
+import {StackParamList} from '../../../App';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import {RouteProp} from '@react-navigation/native';
+import Profile from '../../../types/Profile';
 
-const ExerciseList: React.FC<ExerciseListProps> = ({
+const ExerciseList: React.FC<{
+  exercises: {[key: string]: Exercise};
+  navigation: NativeStackNavigationProp<StackParamList, 'ExerciseList'>;
+  route: RouteProp<StackParamList, 'ExerciseList'>;
+  getExercisesAction: ({
+    level,
+    goal,
+    warmUp,
+    coolDown,
+  }: {
+    level: Level;
+    goal: Goal;
+    warmUp: WarmUp[];
+    coolDown: CoolDown[];
+  }) => void;
+  workout: Exercise[];
+  setWorkoutAction: (workout: Exercise[]) => void;
+  loading: boolean;
+  profile: Profile;
+}> = ({
   exercises,
   route,
   navigation,
@@ -28,7 +56,7 @@ const ExerciseList: React.FC<ExerciseListProps> = ({
   const {level, goal, equipment, warmUp, coolDown} = route.params;
 
   useEffect(() => {
-    getExercisesAction(level, goal, warmUp, coolDown);
+    getExercisesAction({level, goal, warmUp, coolDown});
   }, [getExercisesAction, level, goal, warmUp, coolDown]);
 
   const selectExercise = (exercise: Exercise) => {

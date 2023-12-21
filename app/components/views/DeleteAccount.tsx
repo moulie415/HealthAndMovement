@@ -1,6 +1,5 @@
 import React, {useEffect, useState} from 'react';
 import {Alert, StyleSheet, View} from 'react-native';
-
 import auth from '@react-native-firebase/auth';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {StackParamList} from '../../App';
@@ -8,13 +7,13 @@ import {MyRootState} from '../../types/Shared';
 import {connect} from 'react-redux';
 import Profile from '../../types/Profile';
 import {appleSignIn, facebookSignIn, googleSignIn} from '../../helpers/api';
-import {setLoggedIn} from '../../actions/profile';
 import Text from '../commons/Text';
 import Button from '../commons/Button';
 import Input from '../commons/Input';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import Header from '../commons/Header';
 import FastImage from 'react-native-fast-image';
+import {setLoggedIn} from '../../reducers/profile';
 
 const DeleteAccount: React.FC<{
   navigation: NativeStackNavigationProp<StackParamList, 'DeleteAccount'>;

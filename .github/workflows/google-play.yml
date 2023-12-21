@@ -27,7 +27,7 @@ jobs:
           yarn
       - name: Run tests
         run: |
-          yarn test
+          yarn test && npx tsc
       # - name: Create sentry files
       #   env:
       #     SENTRY_PROPERTIES: ${{ secrets.SENTRY_PROPERTIES }}

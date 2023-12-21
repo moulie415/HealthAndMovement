@@ -5,15 +5,13 @@ import {
   TouchableOpacity,
   ImageSourcePropType,
 } from 'react-native';
-
-import globalStyles from '../../../styles/globalStyles';
 import {Goal, MyRootState} from '../../../types/Shared';
 import ImageLoader from '../../commons/ImageLoader';
-import {setFitnessGoal, setStrengthArea} from '../../../actions/exercises';
 import {connect} from 'react-redux';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {StackParamList} from '../../../App';
 import Text from '../../commons/Text';
+import {setFitnessGoal, setStrengthArea} from '../../../reducers/exercises';
 
 const FitnessGoal: React.FC<{
   setFitnessGoalAction: (goal: Goal) => void;

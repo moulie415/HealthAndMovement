@@ -1,25 +1,24 @@
 import {call, put, select, throttle} from 'redux-saga/effects';
-import {
-  GetQuickRoutinesByIdAction,
-  GET_QUICK_ROUTINES,
-  GET_QUICK_ROUTINES_BY_ID,
-  GET_SAVED_QUICK_ROUTINES,
-  SaveQuickRoutineAction,
-  SAVE_QUICK_ROUTINE,
-  setQuickRoutines,
-  setSavedQuickRoutine,
-} from '../actions/quickRoutines';
 import * as api from '../helpers/api';
 import QuickRoutine from '../types/QuickRoutines';
 import {MyRootState} from '../types/Shared';
 import Snackbar from 'react-native-snackbar';
 import {SavedQuickRoutine} from '../types/SavedItem';
-import {setLoading} from '../actions/exercises';
 import {logError} from '../helpers/error';
 import {ProfileState} from '../reducers/profile';
-import {QuickRoutinesState} from '../reducers/quickRoutines';
+import {
+  GET_QUICK_ROUTINES,
+  GET_QUICK_ROUTINES_BY_ID,
+  GET_SAVED_QUICK_ROUTINES,
+  QuickRoutinesState,
+  SAVE_QUICK_ROUTINE,
+  setQuickRoutines,
+  setSavedQuickRoutines,
+} from '../reducers/quickRoutines';
 import {SettingsState} from '../reducers/settings';
 import {sendGoalTargetNotification} from '../helpers/goals';
+import {setLoading} from '../reducers/exercises';
+import {PayloadAction} from '@reduxjs/toolkit';
 
 export function* getQuickRoutines() {
   try {
@@ -32,7 +31,7 @@ export function* getQuickRoutines() {
   }
 }
 
-function* saveQuickRoutine(action: SaveQuickRoutineAction) {
+function* saveQuickRoutine(action: PayloadAction<SavedQuickRoutine>) {
   try {
     const {profile, weeklyItems}: ProfileState = yield select(
       (state: MyRootState) => state.profile,
@@ -70,7 +69,7 @@ export function* getSavedQuickRoutines() {
     const savedQuickRoutines: {[key: string]: SavedQuickRoutine} = yield call(
       api.getSavedQuickRoutines,
     );
-    yield put(setSavedQuickRoutine(savedQuickRoutines));
+    yield put(setSavedQuickRoutines(savedQuickRoutines));
     const quickRoutines: {[key: string]: QuickRoutine} = yield select(
       (state: MyRootState) => state.quickRoutines.quickRoutines,
     );
@@ -92,7 +91,7 @@ export function* getSavedQuickRoutines() {
   }
 }
 
-function* getQuickRoutinesById(action: GetQuickRoutinesByIdAction) {
+function* getQuickRoutinesById(action: PayloadAction<string[]>) {
   try {
     const ids = action.payload;
     yield put(setLoading(true));

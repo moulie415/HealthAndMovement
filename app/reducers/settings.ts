@@ -1,4 +1,4 @@
-import {SettingsActions, SET_SETTINGS} from '../actions/settings';
+import {PayloadAction, createSlice} from '@reduxjs/toolkit';
 import {Goal, Level} from '../types/Shared';
 
 export interface SettingsWorkoutGoal {
@@ -47,15 +47,27 @@ const initialState: SettingsState = {
   },
 };
 
-const reducer = (
-  state = initialState,
-  action: SettingsActions,
-): SettingsState => {
-  switch (action.type) {
-    case SET_SETTINGS:
-      return action.payload;
-    default:
-      return state;
-  }
-};
-export default reducer;
+export const SETTINGS = 'settings';
+
+export type SETTINGS = typeof SETTINGS;
+
+export const SET_SETTINGS = `${SETTINGS}/setSettings`;
+
+export type SET_SETTINGS = typeof SET_SETTINGS;
+
+export const settingSlice = createSlice({
+  name: SETTINGS,
+  initialState,
+  reducers: {
+    setSettings: (
+      state: SettingsState,
+      {payload}: PayloadAction<SettingsState>,
+    ) => {
+      return payload;
+    },
+  },
+});
+
+export const {setSettings} = settingSlice.actions;
+
+export default settingSlice.reducer;

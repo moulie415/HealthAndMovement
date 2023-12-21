@@ -4,8 +4,8 @@ import {Provider} from 'react-redux';
 import Purchases, {LOG_LEVEL} from 'react-native-purchases';
 import {PersistGate} from 'redux-persist/lib/integration/react';
 import {persistStore} from 'redux-persist';
-import {createStore, applyMiddleware, compose} from 'redux';
-import createSagaMiddleware from 'redux-saga';
+import {applyMiddleware, configureStore} from '@reduxjs/toolkit';
+import createSagaMiddleware from '@redux-saga/core';
 import {NavigationContainer} from '@react-navigation/native';
 import 'react-native-gesture-handler';
 import rootSaga from './sagas';
@@ -40,27 +40,19 @@ import {
   Image,
 } from 'react-native';
 import Config from 'react-native-config';
-import {logError} from './helpers/error';
 import MobileAds from 'react-native-google-mobile-ads';
 import colors from './constants/colors';
 import FastImage from 'react-native-fast-image';
-import CustomTooltip from './components/commons/CustomTooltip';
-import WelcomeModal from './WelcomeModal';
 import Profile from './types/Profile';
 
 const {height, width} = Dimensions.get('window');
 
-const composeEnhancers =
-  // @ts-ignore
-  (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
-
 const sagaMiddleware = createSagaMiddleware();
-const middlewares = [sagaMiddleware];
 
-export const store = createStore(
+export const store = configureStore({
   reducer,
-  composeEnhancers(applyMiddleware(...middlewares)),
-);
+  middleware: [sagaMiddleware],
+});
 
 export const persistor = persistStore(store);
 

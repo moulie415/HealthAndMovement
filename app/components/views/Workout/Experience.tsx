@@ -2,9 +2,6 @@ import React, {useState} from 'react';
 import {View, SafeAreaView, TouchableOpacity} from 'react-native';
 import {connect} from 'react-redux';
 import Icon from 'react-native-vector-icons/FontAwesome5';
-import {setLevel} from '../../../actions/exercises';
-
-import globalStyles from '../../../styles/globalStyles';
 import {Level, MyRootState} from '../../../types/Shared';
 import ImageLoader from '../../commons/ImageLoader';
 import Text from '../../commons/Text';
@@ -13,6 +10,7 @@ import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {StackParamList} from '../../../App';
 import colors from '../../../constants/colors';
 import ListItem from '../../commons/ListItem';
+import {setLevel} from '../../../reducers/exercises';
 
 const Experience: React.FC<{
   setLevelAction: (level: Level) => void;

@@ -1,37 +1,10 @@
-import {
-  call,
-  put,
-  select,
-  takeEvery,
-  takeLatest,
-  take,
-  all,
-  fork,
-  throttle,
-} from 'redux-saga/effects';
+import {call, put, select, take, all, throttle} from 'redux-saga/effects';
 import {eventChannel} from '@redux-saga/core';
 import {EventChannel} from '@redux-saga/core';
 import Snackbar from 'react-native-snackbar';
-import {
-  GetExercisesAction,
-  GetExercisesByIdAction,
-  GET_EXERCISES,
-  GET_EXERCISES_BY_ID,
-  GET_SAVED_WORKOUTS,
-  SaveWorkoutAction,
-  SAVE_WORKOUT,
-  setExercises,
-  setLoading,
-  setSavedWorkouts,
-  setWorkout,
-  viewWorkout,
-  ViewWorkoutAction,
-  VIEW_WORKOUT,
-} from '../actions/exercises';
 import Exercise from '../types/Exercise';
 import * as api from '../helpers/api';
-import {MyRootState} from '../types/Shared';
-import {FirebaseFirestoreTypes} from '@react-native-firebase/firestore';
+import {CoolDown, Goal, Level, MyRootState, WarmUp} from '../types/Shared';
 import {SavedWorkout} from '../types/SavedItem';
 import queryString from 'query-string';
 import {Alert} from 'react-native';
@@ -43,18 +16,33 @@ import Profile from '../types/Profile';
 import {alertPremiumFeature} from '../helpers/exercises';
 import {logError} from '../helpers/error';
 import * as _ from 'lodash';
-import {setProfile} from '../actions/profile';
 import * as polar from '../helpers/polar';
 import {QuickRoutinesState} from '../reducers/quickRoutines';
-import {
-  contributesToScore,
-  getGoalsData,
-  sendGoalTargetNotification,
-} from '../helpers/goals';
-import {ProfileState} from '../reducers/profile';
+import {sendGoalTargetNotification} from '../helpers/goals';
+import {ProfileState, setProfile} from '../reducers/profile';
 import {SettingsState} from '../reducers/settings';
+import {
+  GET_EXERCISES,
+  GET_EXERCISES_BY_ID,
+  GET_SAVED_WORKOUTS,
+  SAVE_WORKOUT,
+  VIEW_WORKOUT,
+  setExercises,
+  setLoading,
+  setSavedWorkouts,
+  setWorkout,
+  viewWorkout,
+} from '../reducers/exercises';
+import {PayloadAction} from '@reduxjs/toolkit';
 
-export function* getExercises(action: GetExercisesAction) {
+export function* getExercises(
+  action: PayloadAction<{
+    level: Level;
+    goal: Goal;
+    warmUp: WarmUp[];
+    coolDown: CoolDown[];
+  }>,
+) {
   const {level, goal, warmUp, coolDown} = action.payload;
   yield put(setLoading(true));
   const exercises: {[key: string]: Exercise} = yield call(
@@ -68,7 +56,7 @@ export function* getExercises(action: GetExercisesAction) {
   yield put(setLoading(false));
 }
 
-export function* saveWorkout(action: SaveWorkoutAction) {
+export function* saveWorkout(action: PayloadAction<SavedWorkout>) {
   try {
     const {profile, weeklyItems}: ProfileState = yield select(
       (state: MyRootState) => state.profile,
@@ -135,7 +123,7 @@ function* getSavedWorkouts() {
   }
 }
 
-export function* getExercisesById(action: GetExercisesByIdAction) {
+export function* getExercisesById(action: PayloadAction<string[]>) {
   try {
     const ids = _.uniq(action.payload);
     yield put(setLoading(true));
@@ -161,7 +149,7 @@ export function* getExercisesById(action: GetExercisesByIdAction) {
   }
 }
 
-export function* viewWorkoutWatcher(action: ViewWorkoutAction) {
+export function* viewWorkoutWatcher(action: PayloadAction<string[]>) {
   try {
     yield put(setLoading(true));
     const ids = action.payload;

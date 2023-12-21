@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {useTourGuideController} from 'rn-tourguide';
 import {MyRootState} from './types/Shared';
 import {connect} from 'react-redux';
-import {setHasViewedTour} from './actions/profile';
+import {setHasViewedTour} from './reducers/profile';
 
 const WelcomeModal: React.FC<{
   showSplash: boolean;

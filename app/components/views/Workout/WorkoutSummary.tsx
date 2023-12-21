@@ -1,6 +1,5 @@
 import React, {useEffect, useState} from 'react';
 import {resetToTabs} from '../../../RootNavigation';
-import {saveWorkout, setShareModalVisible} from '../../../actions/exercises';
 import {MyRootState} from '../../../types/Shared';
 import {connect} from 'react-redux';
 import {StyleSheet, View} from 'react-native';
@@ -17,6 +16,7 @@ import {RouteProp} from '@react-navigation/native';
 import {SavedWorkout} from '../../../types/SavedItem';
 import Profile from '../../../types/Profile';
 import Exercise from '../../../types/Exercise';
+import { saveWorkout, setShareModalVisible } from '../../../reducers/exercises';
 
 const WorkoutSummary: React.FC<{
   navigation: NativeStackNavigationProp<StackParamList, 'WorkoutSummary'>;

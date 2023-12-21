@@ -2,15 +2,15 @@ import React, {FunctionComponent, useEffect} from 'react';
 import {FlatList, View} from 'react-native';
 import {connect} from 'react-redux';
 import moment from 'moment';
-import {getSavedWorkouts} from '../../../actions/exercises';
 import {SavedQuickRoutine, SavedWorkout} from '../../../types/SavedItem';
 import {MyRootState} from '../../../types/Shared';
 import AbsoluteSpinner from '../../commons/AbsoluteSpinner';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {StackParamList} from '../../../App';
-import {getSavedQuickRoutines} from '../../../actions/quickRoutines';
 import QuickRoutine from '../../../types/QuickRoutines';
 import SavedWorkoutCard from '../../commons/SavedWorkoutCard';
+import {getSavedQuickRoutines} from '../../../reducers/quickRoutines';
+import {getSavedWorkouts} from '../../../reducers/exercises';
 
 type SavedItemsNavigationProp = NativeStackNavigationProp<
   StackParamList,

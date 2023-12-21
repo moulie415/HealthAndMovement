@@ -6,13 +6,7 @@ import {RouteProp} from '@react-navigation/native';
 import {connect} from 'react-redux';
 import {MyRootState} from '../../../types/Shared';
 import QuickRoutine from '../../../types/QuickRoutines';
-import {
-  getQuickRoutines,
-  startQuickRoutine,
-} from '../../../actions/quickRoutines';
 import {AD_KEYWORDS, UNIT_ID_INTERSTITIAL} from '../../../constants';
-import {getExercisesById} from '../../../actions/exercises';
-
 import Profile from '../../../types/Profile';
 import {SettingsState} from '../../../reducers/settings';
 import AbsoluteSpinner from '../../commons/AbsoluteSpinner';
@@ -23,6 +17,11 @@ import Header from '../../commons/Header';
 import WorkoutCard from '../../commons/WorkoutCard';
 import FastImage from 'react-native-fast-image';
 import colors from '../../../constants/colors';
+import {
+  getQuickRoutines,
+  startQuickRoutine,
+} from '../../../reducers/quickRoutines';
+import {getExercisesById} from '../../../reducers/exercises';
 
 const {height} = Dimensions.get('screen');
 

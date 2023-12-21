@@ -7,13 +7,10 @@ import Text from '../../commons/Text';
 import colors from '../../../constants/colors';
 import Exercise from '../../../types/Exercise';
 import Test from '../../../types/Test';
-import {getExercisesById, setWorkout} from '../../../actions/exercises';
 import {navigate} from '../../../RootNavigation';
-import {getTestsById} from '../../../actions/tests';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import * as _ from 'lodash';
 import Education from '../../../types/Education';
-import {getEducationById} from '../../../actions/education';
 import WorkoutCard from '../../commons/WorkoutCard';
 import TestCard from '../../commons/TestCard';
 
@@ -21,6 +18,9 @@ import {objectHasNonEmptyValues} from '../../../helpers';
 import NutritionCard from '../../commons/NutritionCard';
 import SleepCard from '../../commons/SleepCard';
 import EducationCard from '../../commons/EducationCard';
+import { getExercisesById, setWorkout } from '../../../reducers/exercises';
+import { getTestsById } from '../../../reducers/tests';
+import { getEducationById } from '../../../reducers/education';
 
 const Daily: React.FC<{
   plan?: Plan;

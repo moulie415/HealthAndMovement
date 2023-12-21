@@ -4,7 +4,6 @@ import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {StackParamList} from '../../../App';
 import {RouteProp} from '@react-navigation/native';
 import WorkoutCard from '../../commons/WorkoutCard';
-import {setWorkout} from '../../../actions/exercises';
 import {connect} from 'react-redux';
 import {MyRootState} from '../../../types/Shared';
 import Exercise from '../../../types/Exercise';
@@ -12,6 +11,7 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import Header from '../../commons/Header';
 import colors from '../../../constants/colors';
 import moment from 'moment';
+import { setWorkout } from '../../../reducers/exercises';
 
 const MonthlyDayView: React.FC<{
   navigation: NativeStackNavigationProp<StackParamList, 'MonthlyDayView'>;

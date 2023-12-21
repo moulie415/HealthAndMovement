@@ -12,9 +12,9 @@ import {
   PLAN_CHANNEL_ID,
   WORKOUT_REMINDERS_CHANNEL_ID,
 } from './app/sagas/profile';
-import {setUnread} from './app/actions/profile';
 import {alertPremiumFeature} from './app/helpers/exercises';
 import messaging from '@react-native-firebase/messaging';
+import { setUnread } from './app/reducers/profile';
 
 PushNotification.configure({
   // (optional) Called when Token is generated (iOS and Android)

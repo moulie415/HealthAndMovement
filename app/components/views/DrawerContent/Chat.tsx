@@ -17,21 +17,12 @@ import {StackParamList} from '../../../App';
 import Profile from '../../../types/Profile';
 import {MyRootState} from '../../../types/Shared';
 import {connect} from 'react-redux';
-import {
-  loadEarlierMessages,
-  sendMessage,
-  setChatMessage,
-  setMessages,
-  setRead,
-} from '../../../actions/profile';
 import Message from '../../../types/Message';
-import {ImageBackground, Platform, TouchableOpacity, View} from 'react-native';
+import {FlatList, TouchableOpacity} from 'react-native';
 import moment from 'moment';
 import Avatar from '../../commons/Avatar';
-
 import Text from '../../commons/Text';
 import colors from '../../../constants/colors';
-import {viewWorkout} from '../../../actions/exercises';
 import AbsoluteSpinner from '../../commons/AbsoluteSpinner';
 import Animated, {FadeIn} from 'react-native-reanimated';
 import {SafeAreaView, useSafeAreaInsets} from 'react-native-safe-area-context';
@@ -39,30 +30,53 @@ import Header from '../../commons/Header';
 import FastImage from 'react-native-fast-image';
 import useInit from '../../../hooks/UseInit';
 import _ from 'lodash';
+import {
+  loadEarlierMessages,
+  sendMessage,
+  setChatMessage,
+  setMessages,
+  setRead,
+} from '../../../reducers/profile';
+import {viewWorkout} from '../../../reducers/exercises';
 
 interface ChatProps {
   navigation: NativeStackNavigationProp<StackParamList, 'Chat'>;
   route: RouteProp<StackParamList, 'Chat'>;
   profile: Profile;
-  setMessagesAction: (
-    uid: string,
-    snapshot: FirebaseFirestoreTypes.QuerySnapshot<FirebaseFirestoreTypes.DocumentData>,
-  ) => void;
+  setMessagesAction: ({
+    uid,
+    snapshot,
+  }: {
+    uid: string;
+    snapshot: FirebaseFirestoreTypes.QuerySnapshot<FirebaseFirestoreTypes.DocumentData>;
+  }) => void;
   messagesObj: {[key: string]: Message};
   connection: Profile;
   chatId: string;
-  sendMessageAction: (message: Message, chatId: string, uid: string) => void;
+  sendMessageAction: ({
+    message,
+    chatId,
+    uid,
+  }: {
+    message: Message;
+    chatId: string;
+    uid: string;
+  }) => void;
   setReadAction: (uid: string) => void;
   viewWorkoutAction: (workout: string[]) => void;
   exercisesLoading: boolean;
-  loadEarlierMessages: (
-    chatId: string,
-    uid: string,
-    startAfter: number,
-  ) => void;
+  loadEarlierMessages: ({
+    chatId,
+    uid,
+    startAfter,
+  }: {
+    chatId: string;
+    uid: string;
+    startAfter: number;
+  }) => void;
   loading: boolean;
   chatMessages: {[key: string]: string};
-  setChatMessage: (uid: string, message: string) => void;
+  setChatMessage: ({uid, message}: {uid: string; message: string}) => void;
 }
 
 const Chat: React.FC<ChatProps> = ({
@@ -88,7 +102,7 @@ const Chat: React.FC<ChatProps> = ({
   const persistChat = useMemo(
     () =>
       _.debounce(t => {
-        setChatMessageAction(uid, t);
+        setChatMessageAction({uid, message: t});
       }, 1000),
     [setChatMessageAction, uid],
   );
@@ -121,20 +135,17 @@ const Chat: React.FC<ChatProps> = ({
     return messages
       .sort((a, b) => (a.createdAt as number) - (b.createdAt as number))
       .map(message => {
-        if (message.user) {
-          return {
-            ...message,
-            user: {...message.user, avatar: message.user.avatar || undefined},
-          };
-        }
-        return message;
+        return {
+          ...message,
+          user: {...message.user, avatar: message.user?.avatar || undefined},
+        };
       });
   }, [messagesObj]);
 
   const loadEarlier = useCallback(async () => {
     const sorted = sortMessages();
     const startAfter = sorted[0].createdAt;
-    loadEarlierMessagesAction(chatId, uid, startAfter as number);
+    loadEarlierMessagesAction({chatId, uid, startAfter: Number(startAfter)});
   }, [sortMessages, chatId, uid, loadEarlierMessagesAction]);
 
   const showLoadEarlier = useMemo(() => {
@@ -223,6 +234,8 @@ const Chat: React.FC<ChatProps> = ({
     );
   };
 
+  const ref = useRef<FlatList>(null);
+
   return (
     <SafeAreaView style={{backgroundColor: colors.appGrey, flex: 1}}>
       <Header
@@ -240,6 +253,7 @@ const Chat: React.FC<ChatProps> = ({
         }
       />
       <GiftedChat
+        messageContainerRef={ref}
         renderCustomView={renderCustomView}
         loadEarlier={showLoadEarlier}
         isLoadingEarlier={loading}
@@ -285,7 +299,8 @@ const Chat: React.FC<ChatProps> = ({
             pending: true,
             createdAt: moment().valueOf(),
           };
-          sendMessageAction(message, chatId, uid);
+          sendMessageAction({message, chatId, uid});
+          ref.current?.scrollToEnd();
         }}
         inverted={false}
         onInputTextChanged={onInputTextChanged}

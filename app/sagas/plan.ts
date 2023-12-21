@@ -10,14 +10,7 @@ import {
   takeLatest,
 } from 'redux-saga/effects';
 import * as _ from 'lodash';
-import {
-  GET_PLAN,
-  setPlan,
-  setSyncedPlanEvent,
-  SYNC_PLAN_WITH_CALENDAR,
-  syncPlanWithCalendar,
-  SyncPlanWithCalendarAction,
-} from '../actions/plan';
+
 import {logError} from '../helpers/error';
 import Profile from '../types/Profile';
 import {MyRootState, Plan} from '../types/Shared';
@@ -33,10 +26,21 @@ import moment from 'moment';
 import RNCalendarEvents, {
   CalendarEventWritable,
 } from 'react-native-calendar-events';
-import {ProfileState} from '../reducers/profile';
-import {UPDATE_PROFILE, updateProfile} from '../actions/profile';
+import {
+  GET_PLAN,
+  ProfileState,
+  setPlan,
+  setSyncedPlanEvent,
+  SYNC_PLAN_WITH_CALENDAR,
+  syncPlanWithCalendar,
+  UPDATE_PROFILE,
+  updateProfile,
+} from '../reducers/profile';
+import {PayloadAction} from '@reduxjs/toolkit';
 
-function* syncPlanWithCalendarWorker(action: SyncPlanWithCalendarAction) {
+function* syncPlanWithCalendarWorker(
+  action: PayloadAction<{plan: Plan; sync: boolean}>,
+) {
   try {
     const {plan, sync} = action.payload;
     if (sync) {
@@ -101,7 +105,7 @@ function* syncPlanWithCalendarWorker(action: SyncPlanWithCalendarAction) {
             _.omit(event.details, ['id']),
           );
         }
-        yield put(setSyncedPlanEvent(key, id));
+        yield put(setSyncedPlanEvent({key, id}));
       }
     }
   } catch (e) {
@@ -138,8 +142,9 @@ export function* schedulePlanReminders() {
     }
 
     if (profile.syncPlanWithCalendar && calendarId) {
+      const p = plan as Plan;
       yield put(
-        syncPlanWithCalendar(plan as Plan, profile.syncPlanWithCalendar),
+        syncPlanWithCalendar({plan: p, sync: profile.syncPlanWithCalendar}),
       );
     }
 
@@ -270,7 +275,8 @@ function* planWatcher() {
           (state: MyRootState) => state.profile,
         );
         if (sync && calendarId) {
-          yield put(syncPlanWithCalendar(plan as Plan, sync));
+          const p = plan as Plan;
+          yield put(syncPlanWithCalendar({plan: p, sync}));
         }
       }
       yield call(schedulePlanReminders);

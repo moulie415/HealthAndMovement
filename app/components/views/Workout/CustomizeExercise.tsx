@@ -5,7 +5,6 @@ import {Picker} from 'react-native-wheel-pick';
 import CustomizeExerciseProps from '../../../types/views/CustomExercise';
 import Carousel from 'react-native-snap-carousel';
 import {Goal, MyRootState} from '../../../types/Shared';
-import {setWorkout} from '../../../actions/exercises';
 import {connect} from 'react-redux';
 import {useEffect} from 'react';
 import ExerciseVideo from '../../commons/ExerciseVideo';
@@ -22,6 +21,7 @@ import {StackParamList} from '../../../App';
 import {RouteProp} from '@react-navigation/core';
 import Exercise from '../../../types/Exercise';
 import Profile from '../../../types/Profile';
+import {setWorkout} from '../../../reducers/exercises';
 
 REPS.shift();
 

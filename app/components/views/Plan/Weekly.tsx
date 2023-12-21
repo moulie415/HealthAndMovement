@@ -10,18 +10,13 @@ import {connect} from 'react-redux';
 import moment from 'moment';
 
 import Text from '../../commons/Text';
-import {getExercisesById, setWorkout} from '../../../actions/exercises';
-import {getTestsById} from '../../../actions/tests';
 import Exercise from '../../../types/Exercise';
 import Test from '../../../types/Test';
-import ImageOverlay from '../../commons/ImageOverlay';
 import colors from '../../../constants/colors';
 import {navigate} from '../../../RootNavigation';
-import Icon from 'react-native-vector-icons/FontAwesome5';
-import ListItem from '../../commons/ListItem';
-import Spinner from '../../commons/Spinner';
 import WorkoutCard from '../../commons/WorkoutCard';
-import TestCard from '../../commons/TestCard';
+import { getExercisesById, setWorkout } from '../../../reducers/exercises';
+import { getTestsById } from '../../../reducers/tests';
 
 const Weekly: React.FC<{
   plan?: Plan;

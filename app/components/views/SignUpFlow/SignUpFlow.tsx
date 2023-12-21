@@ -10,8 +10,7 @@ import {
 import {connect} from 'react-redux';
 import colors from '../../../constants/colors';
 import Profile, {Gender} from '../../../types/Profile';
-import {Goal, Level, MyRootState} from '../../../types/Shared';
-import {signUp, SignUpPayload} from '../../../actions/profile';
+import {Goal, Level, MyRootState, SignUpPayload} from '../../../types/Shared';
 import {useBackHandler} from '../../../hooks/UseBackHandler';
 import {
   getDateOfBirth,
@@ -40,6 +39,7 @@ import useThrottle from '../../../hooks/UseThrottle';
 import {Area, Equipment} from '../../../types/QuickRoutines';
 import SelectEquipment from './SelectEquipment';
 import SelectExperience from './SelectExperience';
+import {signUp} from '../../../reducers/profile';
 
 const {width} = Dimensions.get('window');
 

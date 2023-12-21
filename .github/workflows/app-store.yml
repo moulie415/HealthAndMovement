@@ -55,7 +55,7 @@ jobs:
           yarn
       - name: Run tests
         run: |
-          yarn test
+          yarn test && npx tsc
       - name: Install certificates
         env:
           SIGNING_CERTIFICATE_P12_DATA: ${{ secrets.SIGNING_CERTIFICATE_P12_DATA }}

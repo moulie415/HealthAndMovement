@@ -2,7 +2,6 @@ import React, {useEffect} from 'react';
 import {connect} from 'react-redux';
 import {MyRootState} from '../../../types/Shared';
 import Profile from '../../../types/Profile';
-import {getConnections} from '../../../actions/profile';
 import Avatar from '../../commons/Avatar';
 import {
   FlatList,
@@ -24,8 +23,7 @@ import {truncate} from '../../../helpers';
 import ListItem from '../../commons/ListItem';
 import Divider from '../../commons/Divider';
 import Header from '../../commons/Header';
-import AddConnectionButton from '../../commons/AddConnectionButton';
-import FastImage from 'react-native-fast-image';
+import {getConnections} from '../../../reducers/profile';
 
 const getLastMessage = (
   messages: {[key: string]: {[key: string]: Message}},

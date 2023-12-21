@@ -21,6 +21,7 @@ const Header: React.FC<{
   customBackPress?: () => void;
   profile: Profile;
   showDrawerMenuButton?: boolean;
+  children?: ReactNode;
 }> = ({
   hasBack,
   title,

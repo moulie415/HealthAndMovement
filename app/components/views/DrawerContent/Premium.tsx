@@ -17,7 +17,6 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import {setPremium} from '../../../actions/profile';
 import {connect} from 'react-redux';
 import Snackbar from 'react-native-snackbar';
 import {MyRootState} from '../../../types/Shared';
@@ -37,6 +36,7 @@ import {RouteProp} from '@react-navigation/native';
 import Profile from '../../../types/Profile';
 import {navigationRef} from '../../../RootNavigation';
 import Button from '../../commons/Button';
+import {setPremium} from '../../../reducers/profile';
 
 const Premium: React.FC<{
   navigation: NativeStackNavigationProp<StackParamList, 'Premium'>;

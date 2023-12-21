@@ -2,8 +2,6 @@ import {View, TouchableOpacity} from 'react-native';
 import React from 'react';
 import {SavedQuickRoutine, SavedWorkout} from '../../types/SavedItem';
 import FastImage from 'react-native-fast-image';
-
-import {getEquipmentString, getLevelString} from './WorkoutCard';
 import {connect} from 'react-redux';
 import {Level, MyRootState} from '../../types/Shared';
 import QuickRoutine from '../../types/QuickRoutines';
@@ -13,10 +11,9 @@ import colors from '../../constants/colors';
 import moment from 'moment';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {StackParamList} from '../../App';
-import {getDifficultyEmoji} from '../../helpers/exercises';
 import Exercise from '../../types/Exercise';
-import {getExercisesById, setWorkout} from '../../actions/exercises';
 import Text from './Text';
+import {getExercisesById, setWorkout} from '../../reducers/exercises';
 
 const SavedWorkoutCard: React.FC<{
   item: SavedWorkout | SavedQuickRoutine;

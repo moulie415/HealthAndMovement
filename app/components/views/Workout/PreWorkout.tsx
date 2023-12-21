@@ -11,13 +11,13 @@ import {ScrollView} from 'react-native-gesture-handler';
 import colors from '../../../constants/colors';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import Button from '../../commons/Button';
-import {MyRootState} from '../../../types/Shared';
+import {MyRootState, UpdateProfilePayload} from '../../../types/Shared';
 import {connect} from 'react-redux';
 import Exercise from '../../../types/Exercise';
 import {getEquipmentList, getMusclesList} from '../../../helpers/exercises';
 import ConnectedApps from '../../commons/ConnectedApps';
 import Toggle from '../../commons/Toggle';
-import {UpdateProfilePayload, updateProfile} from '../../../actions/profile';
+import {updateProfile} from '../../../reducers/profile';
 
 const PreWorkout: React.FC<{
   navigation: NativeStackNavigationProp<StackParamList, 'PreWorkout'>;

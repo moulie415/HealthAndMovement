@@ -2121,7 +2121,9 @@ PODS:
     - React-Core
   - RNTestFlight (1.1.0):
     - React-Core
-  - RNVectorIcons (10.0.0):
+  - RNVectorIcons (10.0.3):
+    - glog
+    - RCT-Folly (= 2022.05.16.00)
     - React-Core
   - RNWatch (1.1.0):
     - React
@@ -2633,7 +2635,7 @@ SPEC CHECKSUMS:
   RNSound: 6c156f925295bdc83e8e422e7d8b38d33bc71852
   RNSVG: ba3e7232f45e34b7b47e74472386cf4e1a676d0a
   RNTestFlight: 3419178faa8527ecfe803607fd338a3803f1fb0d
-  RNVectorIcons: 8b5bb0fa61d54cd2020af4f24a51841ce365c7e9
+  RNVectorIcons: ee070291bc6c7b4c880181b214534d4657ea1905
   RNWatch: fd30ca40a5b5ef58dcbc195638e68219bc455236
   SDWebImage: a7f831e1a65eb5e285e3fb046a23fcfbf08e696d
   SDWebImageWebPCoder: 908b83b6adda48effe7667cd2b7f78c897e5111d

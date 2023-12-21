@@ -24,11 +24,11 @@ import {NavigationProp, RouteProp} from '@react-navigation/native';
 import Profile from '../../../types/Profile';
 import {navigate, resetToTabs} from '../../../RootNavigation';
 import TestResultsModal from './TestResultsModal';
-import {saveTest} from '../../../actions/tests';
 import {SavedTest} from '../../../types/SavedItem';
 import useThrottle from '../../../hooks/UseThrottle';
 import {useBackHandler} from '../../../hooks/UseBackHandler';
 import HistoricalTestsModal from './HistoricalTestsModal';
+import {saveTest} from '../../../reducers/tests';
 
 export const PREP_TIME = 5;
 

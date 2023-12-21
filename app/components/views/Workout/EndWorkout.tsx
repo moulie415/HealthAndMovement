@@ -2,7 +2,6 @@ import React, {useMemo, useState, useEffect} from 'react';
 import {Alert, View} from 'react-native';
 import {MyRootState} from '../../../types/Shared';
 import {connect} from 'react-redux';
-import {saveWorkout as saveWorkoutAction} from '../../../actions/exercises';
 import {saveWorkout} from '../../../helpers/biometrics';
 import Button from '../../commons/Button';
 import {SafeAreaView} from 'react-native-safe-area-context';
@@ -17,11 +16,12 @@ import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import Profile from '../../../types/Profile';
 import Exercise from '../../../types/Exercise';
 import {SavedWorkout} from '../../../types/SavedItem';
-import {setProfile} from '../../../actions/profile';
 import Text from '../../commons/Text';
 import {FONTS_SIZES} from '../../../constants';
 import {ScrollView} from 'react-native-gesture-handler';
 import {useBackHandler} from '../../../hooks/UseBackHandler';
+import {saveWorkout as saveWorkoutAction} from '../../../reducers/exercises';
+import {setProfile} from '../../../reducers/profile';
 
 const EndWorkout: React.FC<{
   navigation: NativeStackNavigationProp<StackParamList, 'EndWorkout'>;

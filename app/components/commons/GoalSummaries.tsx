@@ -8,10 +8,10 @@ import Icon from 'react-native-vector-icons/FontAwesome5';
 import {connect} from 'react-redux';
 import Profile from '../../types/Profile';
 import {
+  WeeklyItems,
   getWeeklyItems,
   getWeeklyItemsForConnection,
-} from '../../actions/profile';
-import {WeeklyItems} from '../../reducers/profile';
+} from '../../reducers/profile';
 import QuickRoutine from '../../types/QuickRoutines';
 import Tile from './Tile';
 import Time from '../../images/time.svg';

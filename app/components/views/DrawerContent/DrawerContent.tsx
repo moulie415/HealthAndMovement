@@ -12,7 +12,6 @@ import {
   View,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
-import {setLoggedIn} from '../../../actions/profile';
 import colors from '../../../constants/colors';
 import {navigationRef, resetToWelcome} from '../../../RootNavigation';
 import {MyRootState} from '../../../types/Shared';
@@ -29,6 +28,7 @@ import * as Sentry from '@sentry/react-native';
 import {getBuildNumber, getVersion} from 'react-native-device-info';
 import Profile from '../../../types/Profile';
 import {DrawerContentComponentProps} from '@react-navigation/drawer';
+import {setLoggedIn} from '../../../reducers/profile';
 
 export const MoreItem: React.FC<{item: ListItem}> = ({item}) => {
   return (

@@ -1,15 +1,15 @@
 import Snackbar from 'react-native-snackbar';
 import {call, put, select, takeLatest, throttle} from 'redux-saga/effects';
+import * as api from '../helpers/api';
+import Education from '../types/Education';
+import {MyRootState} from '../types/Shared';
 import {
-  GetEducationByIdAction,
   GET_EDUCATION,
   GET_EDUCATION_BY_ID,
   setEducation,
   setEducationLoading,
-} from '../actions/education';
-import * as api from '../helpers/api';
-import Education from '../types/Education';
-import {MyRootState} from '../types/Shared';
+} from '../reducers/education';
+import {PayloadAction} from '@reduxjs/toolkit';
 
 function* getEducation() {
   try {
@@ -22,7 +22,7 @@ function* getEducation() {
   yield put(setEducationLoading(false));
 }
 
-function* getEducationById(action: GetEducationByIdAction) {
+function* getEducationById(action: PayloadAction<string[]>) {
   try {
     const ids = action.payload;
     yield put(setEducationLoading(true));

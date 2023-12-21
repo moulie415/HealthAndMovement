@@ -7,12 +7,12 @@ import Button from '../../commons/Button';
 import Text from '../../commons/Text';
 import Test from '../../../types/Test';
 import Modal from '../../commons/Modal';
-import {getSavedTests} from '../../../actions/tests';
 import {SavedTest} from '../../../types/SavedItem';
 import Spinner from '../../commons/Spinner';
 import {FlatList} from 'react-native-gesture-handler';
 import ListItem from '../../commons/ListItem';
 import moment from 'moment';
+import { getSavedTests } from '../../../reducers/tests';
 
 const HistoricalTestsModal: React.FC<{
   test: Test;

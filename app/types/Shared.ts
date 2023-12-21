@@ -4,6 +4,8 @@ import {ProfileState} from '../reducers/profile';
 import {QuickRoutinesState} from '../reducers/quickRoutines';
 import {SettingsState} from '../reducers/settings';
 import {TestsState} from '../reducers/tests';
+import {Gender} from './Profile';
+import {Area, Equipment as EquipmentLevel} from './QuickRoutines';
 
 export type MyRootState = {
   exercises: ExercisesState;
@@ -140,4 +142,41 @@ export interface CalendarType {
   color: string;
   /** The event availability settings supported by the calendar. */
   allowedAvailabilities: string[];
+}
+
+export interface SignUpPayload {
+  name: string;
+  surname: string;
+  dob: string;
+  weight: number;
+  height: number;
+  gender: Gender;
+  marketing: boolean;
+  goal: Goal;
+  area: Area;
+  equipment: EquipmentLevel;
+  experience: Level;
+  fromProfile?: boolean;
+}
+
+export interface UpdateProfilePayload {
+  dob?: string;
+  weight?: number;
+  height?: number;
+  gender?: Gender;
+  marketing?: boolean;
+  goal?: Goal;
+  avatar?: string;
+  bodyFatPercentage?: number;
+  muscleMass?: number;
+  boneMass?: number;
+  workoutReminders?: boolean;
+  workoutReminderTime?: string;
+  testReminderTime?: string;
+  testReminders?: boolean;
+  autoPlay?: boolean;
+  prepTime?: number;
+  workoutMusic?: boolean;
+  syncPlanWithCalendar?: boolean;
+  goalReminders?: boolean;
 }

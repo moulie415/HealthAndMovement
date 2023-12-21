@@ -10,7 +10,7 @@ import colors from '../../constants/colors';
 import Text from './Text';
 import LinearGradient from 'react-native-linear-gradient';
 import {navigate} from '../../RootNavigation';
-import {setProfile} from '../../actions/profile';
+import { setProfile } from '../../reducers/profile';
 
 const ConnectedApps: React.FC<{
   profile: Profile;

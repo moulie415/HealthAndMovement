@@ -4,10 +4,13 @@ import moment from 'moment';
 import {connect} from 'react-redux';
 import {getVideoHeight} from '../../../helpers';
 import Icon from 'react-native-vector-icons/FontAwesome5';
-import {MyRootState, PauseEvent} from '../../../types/Shared';
+import {
+  MyRootState,
+  PauseEvent,
+  UpdateProfilePayload,
+} from '../../../types/Shared';
 import ExerciseVideo from '../../commons/ExerciseVideo';
 import colors from '../../../constants/colors';
-import {setExerciseNote} from '../../../actions/exercises';
 import PagerView from 'react-native-pager-view';
 import AbsoluteSpinner from '../../commons/AbsoluteSpinner';
 import ViewMore from '../../commons/ViewMore';
@@ -24,19 +27,18 @@ import WorkoutTabs from '../../commons/WorkoutTabs';
 import ResistanceScaleInfo from '../Workout/ResistanceScaleInfo';
 import useWorkoutTimer from '../../../hooks/UseWorkoutTimer';
 import useExerciseEvents from '../../../hooks/UseExerciseEvents';
-import {UpdateProfilePayload, updateProfile} from '../../../actions/profile';
 import Profile from '../../../types/Profile';
 import Toggle from '../../commons/Toggle';
 import {FONTS_SIZES} from '../../../constants';
 import {workoutSong} from '../../../sagas/profile';
 import playWorkoutSong from '../../../helpers/playWorkoutSong';
+import {updateProfile} from '../../../reducers/profile';
 
 const QuickRoutineView: React.FC<{
   videos: {[key: string]: {src: string; path: string}};
   loading: boolean;
   route: RouteProp<StackParamList, 'QuickRoutine'>;
   navigation: NativeStackNavigationProp<StackParamList, 'QuickRoutine'>;
-  setExerciseNoteAction: (exercise: string, note: string) => void;
   exerciseNotes: {[key: string]: string};
   exercisesObj: {[key: string]: Exercise};
   autoPlay?: boolean;
@@ -422,7 +424,6 @@ const mapStateToProps = ({exercises, profile}: MyRootState) => ({
 });
 
 const mapDispatchToProps = {
-  setExerciseNoteAction: setExerciseNote,
   updateProfile,
 };
 

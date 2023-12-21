@@ -10,10 +10,10 @@ import {MarkedDates} from 'react-native-calendars/src/types';
 import Divider from '../../commons/Divider';
 import {FlatList} from 'react-native-gesture-handler';
 import WorkoutCard from '../../commons/WorkoutCard';
-import {setWorkout} from '../../../actions/exercises';
 import Exercise from '../../../types/Exercise';
 import {navigate} from '../../../RootNavigation';
 import Text from '../../commons/Text';
+import {setWorkout} from '../../../reducers/exercises';
 
 const Monthly: React.FC<{
   plan?: Plan;

@@ -3,13 +3,7 @@ import moment from 'moment';
 import React, {FunctionComponent, useEffect, useMemo} from 'react';
 import {FlatList, View} from 'react-native';
 import {connect} from 'react-redux';
-import {getExercisesById} from '../../../actions/exercises';
-import {
-  getQuickRoutinesById,
-  getSavedQuickRoutines,
-} from '../../../actions/quickRoutines';
 import {StackParamList} from '../../../App';
-
 import {getDifficultyEmoji} from '../../../helpers/exercises';
 import QuickRoutine from '../../../types/QuickRoutines';
 import {SavedQuickRoutine} from '../../../types/SavedItem';
@@ -18,6 +12,11 @@ import AbsoluteSpinner from '../../commons/AbsoluteSpinner';
 import ImageOverlay from '../../commons/ImageOverlay';
 import ListItem from '../../commons/ListItem';
 import Text from '../../commons/Text';
+import {getExercisesById} from '../../../reducers/exercises';
+import {
+  getQuickRoutinesById,
+  getSavedQuickRoutines,
+} from '../../../reducers/quickRoutines';
 
 type SavedItemsNavigationProp = NativeStackNavigationProp<
   StackParamList,
@@ -95,8 +94,7 @@ const SavedQuickRoutines: FunctionComponent<{
                           : require('../../../images/old_man_stretching.jpeg')
                       }>
                       <View style={{alignItems: 'center'}}>
-                        <Text
-                          style={{color: '#fff', fontSize: 12}}>
+                        <Text style={{color: '#fff', fontSize: 12}}>
                           {'Duration '}
                         </Text>
                         <Text style={{color: '#fff'}}>

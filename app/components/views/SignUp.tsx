@@ -1,11 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {Alert, Platform, SafeAreaView, TouchableOpacity} from 'react-native';
 import {connect} from 'react-redux';
-import {
-  handleAuth,
-  setLoginEmail,
-  setLoginPassword,
-} from '../../actions/profile';
 import colors from '../../constants/colors';
 import Text from '../commons/Text';
 import Input from '../commons/Input';
@@ -18,6 +13,11 @@ import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {StackParamList} from '../../App';
 import {FirebaseAuthTypes} from '@react-native-firebase/auth';
 import {logError} from '../../helpers/error';
+import {
+  handleAuth,
+  setLoginEmail,
+  setLoginPassword,
+} from '../../reducers/profile';
 
 const SignUp: React.FC<{
   navigation: NativeStackNavigationProp<StackParamList, 'SignUp'>;

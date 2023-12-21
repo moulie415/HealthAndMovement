@@ -8,8 +8,6 @@ import Text from './Text';
 import Avatar from './Avatar';
 import {shareWorkout} from '../../helpers/exercises';
 import Exercise from '../../types/Exercise';
-import {setShareModalVisible} from '../../actions/exercises';
-import {getConnections} from '../../actions/profile';
 import {FlatList, View} from 'react-native';
 
 import Icon from 'react-native-vector-icons/FontAwesome5';
@@ -23,6 +21,8 @@ import uuid from 'react-native-uuid';
 import Modal from './Modal';
 import Divider from './Divider';
 import ListItem from './ListItem';
+import { setShareModalVisible } from '../../reducers/exercises';
+import { getConnections } from '../../reducers/profile';
 
 const ShareModal: React.FC<{
   visible: boolean;

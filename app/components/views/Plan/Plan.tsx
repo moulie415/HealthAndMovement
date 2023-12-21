@@ -15,7 +15,6 @@ import Button from '../../commons/Button';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {StackParamList} from '../../../App';
 import Text from '../../commons/Text';
-import {getPlan} from '../../../actions/plan';
 import moment from 'moment';
 import {TabView, SceneMap, TabBar} from 'react-native-tab-view';
 import Daily from './Daily';
@@ -27,13 +26,10 @@ import Purchases, {
   PurchasesPackage,
 } from 'react-native-purchases';
 import {logError} from '../../../helpers/error';
-import Spinner from '../../commons/Spinner';
-import LinearGradient from 'react-native-linear-gradient';
-import FastImage from 'react-native-fast-image';
 import Header from '../../commons/Header';
 import {useFocusEffect} from '@react-navigation/native';
-import {setRead} from '../../../actions/profile';
 import isTestFlight from '../../../helpers/isTestFlight';
+import {getPlan, setRead} from '../../../reducers/profile';
 
 const renderScene = SceneMap({
   daily: Daily,
@@ -192,13 +188,12 @@ const Plan: React.FC<{
               Christian creates your plan it will appear here.{' '}
               {hasPremium ? (
                 <Text>
-                  You're are already subscribed to Premium so you just
-                  need to wait for Christian to create your plan.
+                  You're are already subscribed to Premium so you just need to
+                  wait for Christian to create your plan.
                 </Text>
               ) : (
                 <Text>
-                  To view your plan also make sure you're subscribed to
-                  Premium.
+                  To view your plan also make sure you're subscribed to Premium.
                 </Text>
               )}
             </Text>

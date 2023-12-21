@@ -13,4 +13,4 @@ jobs:
           yarn
       - name: Run tests
         run: |
-          yarn test
+          yarn test && npx tsc

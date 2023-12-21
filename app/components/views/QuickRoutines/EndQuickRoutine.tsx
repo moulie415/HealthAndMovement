@@ -3,7 +3,6 @@ import {Alert, View} from 'react-native';
 import {MyRootState} from '../../../types/Shared';
 import {connect} from 'react-redux';
 import {saveWorkout} from '../../../helpers/biometrics';
-import {saveQuickRoutine} from '../../../actions/quickRoutines';
 import colors from '../../../constants/colors';
 import Button from '../../commons/Button';
 import {SafeAreaView} from 'react-native-safe-area-context';
@@ -11,7 +10,6 @@ import Header from '../../commons/Header';
 import RPESlider from '../../commons/RPESlider';
 import useThrottle from '../../../hooks/UseThrottle';
 import useWorkoutData from '../../../hooks/UseWorkoutData';
-import {setProfile} from '../../../actions/profile';
 import {RouteProp} from '@react-navigation/native';
 import {StackParamList} from '../../../App';
 import Profile from '../../../types/Profile';
@@ -23,6 +21,8 @@ import Text from '../../commons/Text';
 import {FONTS_SIZES} from '../../../constants';
 import {ScrollView} from 'react-native-gesture-handler';
 import {useBackHandler} from '../../../hooks/UseBackHandler';
+import {saveQuickRoutine} from '../../../reducers/quickRoutines';
+import {setProfile} from '../../../reducers/profile';
 
 const EndQuickRoutine: React.FC<{
   navigation: NativeStackNavigationProp<StackParamList, 'EndQuickRoutine'>;

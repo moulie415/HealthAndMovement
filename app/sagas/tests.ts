@@ -7,29 +7,28 @@ import {
   select,
   throttle,
 } from 'redux-saga/effects';
-import {setLoading} from '../actions/exercises';
-import {
-  GetTestsByIdAction,
-  GET_SAVED_TESTS,
-  GET_TESTS,
-  GET_TESTS_BY_ID,
-  SaveTestAction,
-  SAVE_TEST,
-  setSavedTests,
-  setTests,
-} from '../actions/tests';
 import * as api from '../helpers/api';
 import {SavedTest} from '../types/SavedItem';
 import {MyRootState} from '../types/Shared';
 import Test from '../types/Test';
 import {logError} from '../helpers/error';
+import {
+  GET_SAVED_TESTS,
+  GET_TESTS,
+  GET_TESTS_BY_ID,
+  SAVE_TEST,
+  setSavedTests,
+  setTests,
+} from '../reducers/tests';
+import {PayloadAction} from '@reduxjs/toolkit';
+import {setLoading} from '../reducers/exercises';
 
 export function* getTests() {
   const tests: {[key: string]: Test} = yield call(api.getTests);
   yield put(setTests(tests));
 }
 
-function* saveTest(action: SaveTestAction) {
+function* saveTest(action: PayloadAction<SavedTest>) {
   try {
     yield call(api.saveTest, action.payload);
     if (action.payload.saved) {
@@ -66,7 +65,7 @@ function* getSavedTests() {
   }
 }
 
-function* getTestsById(action: GetTestsByIdAction) {
+function* getTestsById(action: PayloadAction<string[]>) {
   try {
     const ids = action.payload;
     yield put(setLoading(true));

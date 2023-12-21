@@ -3,7 +3,6 @@ import moment from 'moment';
 import colors from '../../../constants/colors';
 import {MyRootState} from '../../../types/Shared';
 import {connect} from 'react-redux';
-import {saveTest} from '../../../actions/tests';
 import {Alert, View} from 'react-native';
 import Button from '../../commons/Button';
 import Text from '../../commons/Text';

@@ -2,8 +2,13 @@ import React, {ReactNode, useState} from 'react';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import DateTimePicker, {Event} from '@react-native-community/datetimepicker';
 import {Platform, ScrollView, StyleSheet, Switch, View} from 'react-native';
-import {CalendarType, Goal, MyRootState, Plan} from '../../../types/Shared';
-import {updateProfile, UpdateProfilePayload} from '../../../actions/profile';
+import {
+  CalendarType,
+  Goal,
+  MyRootState,
+  Plan,
+  UpdateProfilePayload,
+} from '../../../types/Shared';
 import {connect} from 'react-redux';
 import moment from 'moment';
 import {TouchableOpacity} from 'react-native';
@@ -23,7 +28,6 @@ import {SettingsState} from '../../../reducers/settings';
 import PickerModal from '../../commons/PickerModal';
 import Clipboard from '@react-native-clipboard/clipboard';
 import Snackbar from 'react-native-snackbar';
-import {setCalendarId, syncPlanWithCalendar} from '../../../actions/plan';
 import Modal from '../../commons/Modal';
 import ListItem from '../../commons/ListItem';
 import {FlatList} from 'react-native-gesture-handler';
@@ -33,6 +37,11 @@ import RNCalendarEvents, {
 import {logError} from '../../../helpers/error';
 import SelectGoalModal from './SelectGoalModal';
 import {getGoalReadableString} from '../../../helpers/goals';
+import {
+  setCalendarId,
+  syncPlanWithCalendar,
+  updateProfile,
+} from '../../../reducers/profile';
 
 const isValidGoal = (goal: Goal) =>
   goal === Goal.STRENGTH || goal === Goal.ACTIVE || goal === Goal.WEIGHT_LOSS;
@@ -76,7 +85,13 @@ const Settings: React.FC<{
   profile: Profile;
   updateProfileAction: (payload: UpdateProfilePayload) => void;
   plan?: Plan;
-  syncPlanWithCalendarAction: (plan: Plan, sync: boolean) => void;
+  syncPlanWithCalendarAction: ({
+    plan,
+    sync,
+  }: {
+    plan: Plan;
+    sync: boolean;
+  }) => void;
   setCalendarId: (id: string) => void;
 }> = ({
   profile,
@@ -140,12 +155,12 @@ const Settings: React.FC<{
               setModalVisible(true);
             } else {
               setCalendarIdAction(list[0].id);
-              syncPlanWithCalendarAction(plan, sync);
+              syncPlanWithCalendarAction({plan, sync});
               setSyncPlanWithCalendar(sync);
             }
           }
         } else {
-          syncPlanWithCalendarAction(plan, sync);
+          syncPlanWithCalendarAction({plan, sync});
           setSyncPlanWithCalendar(sync);
         }
       }
@@ -426,7 +441,7 @@ const Settings: React.FC<{
                   onPress={() => {
                     setModalVisible(false);
                     setCalendarIdAction(item.id);
-                    syncPlanWithCalendarAction(plan, true);
+                    syncPlanWithCalendarAction({plan, sync: true});
                   }}
                   accessoryLeft={
                     <Icon

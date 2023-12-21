@@ -10,12 +10,6 @@ import {
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import {connect} from 'react-redux';
 import {MyRootState} from '../../types/Shared';
-import {
-  handleAuth,
-  setLoginEmail,
-  setLoginPassword,
-  signUp,
-} from '../../actions/profile';
 import colors from '../../constants/colors';
 import Text from '../commons/Text';
 import {
@@ -34,6 +28,12 @@ import FastImage from 'react-native-fast-image';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {StackParamList} from '../../App';
 import {FirebaseAuthTypes} from '@react-native-firebase/auth';
+import {
+  handleAuth,
+  setLoginEmail,
+  setLoginPassword,
+  signUp,
+} from '../../reducers/profile';
 
 const Login: React.FC<{
   navigation: NativeStackNavigationProp<StackParamList, 'Login'>;

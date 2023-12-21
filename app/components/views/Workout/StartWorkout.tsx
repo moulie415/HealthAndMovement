@@ -13,7 +13,7 @@ import Image from 'react-native-fast-image';
 import PagerView from 'react-native-pager-view';
 import {connect} from 'react-redux';
 import colors from '../../../constants/colors';
-import {MyRootState, PauseEvent} from '../../../types/Shared';
+import {MyRootState, PauseEvent, UpdateProfilePayload} from '../../../types/Shared';
 import ExerciseVideo from '../../commons/ExerciseVideo';
 import {getVideoHeight} from '../../../helpers';
 import Text from '../../commons/Text';
@@ -39,10 +39,10 @@ import WorkoutTabFooter from '../../commons/WorkoutTabFooter';
 import useWorkoutTimer from '../../../hooks/UseWorkoutTimer';
 import useExerciseEvents from '../../../hooks/UseExerciseEvents';
 import Toggle from '../../commons/Toggle';
-import {UpdateProfilePayload, updateProfile} from '../../../actions/profile';
 import {FONTS_SIZES} from '../../../constants';
 import {workoutSong} from '../../../sagas/profile';
 import playWorkoutSong from '../../../helpers/playWorkoutSong';
+import { updateProfile } from '../../../reducers/profile';
 
 const StartWorkout: React.FC<{
   workout: Exercise[];

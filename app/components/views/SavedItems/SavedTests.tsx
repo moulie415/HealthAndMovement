@@ -2,13 +2,13 @@ import React, {FunctionComponent, useEffect, useMemo} from 'react';
 import {Alert, FlatList, View} from 'react-native';
 import moment from 'moment';
 import {connect} from 'react-redux';
-import {getSavedTests} from '../../../actions/tests';
 import {SavedTest} from '../../../types/SavedItem';
 import {MyRootState} from '../../../types/Shared';
 import AbsoluteSpinner from '../../commons/AbsoluteSpinner';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {StackParamList} from '../../../App';
 import SavedTestCard from '../../commons/SavedTestCard';
+import {getSavedTests} from '../../../reducers/tests';
 
 type SavedItemsNavigationProp = NativeStackNavigationProp<
   StackParamList,

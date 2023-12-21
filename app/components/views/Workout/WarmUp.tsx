@@ -2,14 +2,12 @@ import React, {useState} from 'react';
 import {View, SafeAreaView, TouchableOpacity, Switch} from 'react-native';
 import Collapsible from 'react-native-collapsible';
 import {connect} from 'react-redux';
-import {setCoolDown, setWarmUp} from '../../../actions/exercises';
-
-import globalStyles from '../../../styles/globalStyles';
 import {CoolDown, MyRootState, WarmUp} from '../../../types/Shared';
 import Divider from '../../commons/Divider';
 import ImageLoader from '../../commons/ImageLoader';
 import ListItem from '../../commons/ListItem';
 import Text from '../../commons/Text';
+import { setCoolDown, setWarmUp } from '../../../reducers/exercises';
 
 const WarmUpAndCoolDown: React.FC<{
   warmUp: WarmUp[];
