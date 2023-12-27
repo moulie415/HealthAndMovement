@@ -40,7 +40,6 @@ import {
   Image,
 } from 'react-native';
 import Config from 'react-native-config';
-import MobileAds from 'react-native-google-mobile-ads';
 import colors from './constants/colors';
 import FastImage from 'react-native-fast-image';
 import Profile from './types/Profile';
@@ -191,13 +190,6 @@ const App: React.FC = () => {
       provider: rnfbProvider,
       isTokenAutoRefreshEnabled: true,
     });
-
-    MobileAds()
-      .initialize()
-      .then(adapterStatuses => {
-        // Initialization complete!
-        console.log(adapterStatuses);
-      });
   }, []);
 
   return (

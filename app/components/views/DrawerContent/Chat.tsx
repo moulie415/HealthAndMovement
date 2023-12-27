@@ -264,6 +264,7 @@ const Chat: React.FC<ChatProps> = ({
         messages={sortMessages()}
         messagesContainerStyle={{marginBottom: 10}}
         textInputProps={{lineHeight: null}}
+        listViewProps={{marginBottom: 10}}
         renderBubble={props => {
           return (
             <Bubble

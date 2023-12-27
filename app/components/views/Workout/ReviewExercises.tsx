@@ -15,7 +15,6 @@ import Icon from 'react-native-vector-icons/FontAwesome5';
 
 import ShareModal from '../../commons/ShareModal';
 import Button from '../../commons/Button';
-import {useInterstitialAd} from 'react-native-google-mobile-ads';
 import Text from '../../commons/Text';
 import ListItem from '../../commons/ListItem';
 import Divider from '../../commons/Divider';
@@ -23,7 +22,7 @@ import Profile from '../../../types/Profile';
 import {SettingsState} from '../../../reducers/settings';
 import {StackParamList} from '../../../App';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import { setWorkout } from '../../../reducers/exercises';
+import {setWorkout} from '../../../reducers/exercises';
 
 const ReviewExercises: React.FC<{
   workout: Exercise[];
@@ -32,31 +31,6 @@ const ReviewExercises: React.FC<{
   profile: Profile;
   settings: SettingsState;
 }> = ({workout, setWorkoutAction, navigation, profile, settings}) => {
-  const {load, show, isLoaded, isClosed} = useInterstitialAd(
-    UNIT_ID_INTERSTITIAL,
-    {
-      keywords: AD_KEYWORDS,
-    },
-  );
-
-  useEffect(() => {
-    if (settings.ads) {
-      load();
-    }
-  }, [settings.ads, load]);
-
-  useEffect(() => {
-    if (isClosed && settings.ads) {
-      load();
-    }
-  }, [isClosed, load, settings.ads]);
-
-  useEffect(() => {
-    if (isClosed) {
-      //  navigation.navigate('PreWorkout', {planWorkout: {}});
-    }
-  }, [isClosed, navigation]);
-
   const renderItem = useCallback(
     ({item, drag, isActive}: RenderItemParams<Exercise>) => {
       return (
@@ -123,11 +97,7 @@ const ReviewExercises: React.FC<{
       <Button
         text="Start workout"
         onPress={() => {
-          if (!profile.premium && isLoaded && settings.ads) {
-            show();
-          } else {
-            //  navigation.navigate('PreWorkout', {planWorkout: {}});
-          }
+          //  navigation.navigate('PreWorkout', {planWorkout: {}});
         }}
         style={{
           position: 'absolute',

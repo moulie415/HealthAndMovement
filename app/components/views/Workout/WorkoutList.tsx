@@ -12,7 +12,6 @@ import {SettingsState} from '../../../reducers/settings';
 import AbsoluteSpinner from '../../commons/AbsoluteSpinner';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import Exercise from '../../../types/Exercise';
-import {useInterstitialAd} from 'react-native-google-mobile-ads';
 import Header from '../../commons/Header';
 import WorkoutCard from '../../commons/WorkoutCard';
 import FastImage from 'react-native-fast-image';
@@ -52,25 +51,6 @@ const WorkoutList: React.FC<{
 
   const [selectedItem, setSelectedItem] = useState<QuickRoutine>();
 
-  const {load, show, isLoaded, isClosed} = useInterstitialAd(
-    UNIT_ID_INTERSTITIAL,
-    {
-      keywords: AD_KEYWORDS,
-    },
-  );
-
-  useEffect(() => {
-    if (settings.ads) {
-      load();
-    }
-  }, [settings.ads, load]);
-
-  useEffect(() => {
-    if (isClosed && settings.ads) {
-      load();
-    }
-  }, [isClosed, load, settings.ads]);
-
   useEffect(() => {
     getQuickRoutinesAction();
   }, [getQuickRoutinesAction]);
@@ -90,13 +70,12 @@ const WorkoutList: React.FC<{
   }, [exercises, quickRoutines, getExercisesByIdAction]);
 
   useEffect(() => {
-    if (isClosed && selectedItem) {
+    if (selectedItem) {
       getExercisesByIdAction(selectedItem.exerciseIds);
       navigation.navigate('PreQuickRoutine', {routine: selectedItem});
       startQuickRoutineAction(selectedItem);
     }
   }, [
-    isClosed,
     navigation,
     selectedItem,
     getExercisesByIdAction,
@@ -132,9 +111,6 @@ const WorkoutList: React.FC<{
                 onPress={() => {
                   if (item.premium && !profile.premium) {
                     navigation.navigate('Premium', {});
-                  } else if (isLoaded && !profile.premium && settings.ads) {
-                    setSelectedItem(item);
-                    show();
                   } else {
                     getExercisesByIdAction(item.exerciseIds);
                     navigation.navigate('PreQuickRoutine', {routine: item});

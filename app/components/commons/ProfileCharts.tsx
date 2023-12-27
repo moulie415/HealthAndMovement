@@ -11,7 +11,7 @@ import Modal from './Modal';
 import * as echarts from 'echarts/core';
 import {LineChart} from 'echarts/charts';
 import {GridComponent} from 'echarts/components';
-import {SVGRenderer, SkiaChart} from '@wuba/react-native-echarts';
+import {SVGRenderer, SvgChart} from '@wuba/react-native-echarts';
 import moment from 'moment';
 import Text from './Text';
 
@@ -23,7 +23,7 @@ const Graph: React.FC<{
   setFilter: (filter: 6 | 30 | 365) => void;
   filter: 6 | 30 | 365;
 }> = ({setShowModal, data, setFilter, filter}) => {
-  const skiaRef = useRef<any>(null);
+  const svgRef = useRef<any>(null);
   useEffect(() => {
     const option = {
       xAxis: {
@@ -47,8 +47,8 @@ const Graph: React.FC<{
       ],
     };
     let chart: any;
-    if (skiaRef.current) {
-      chart = echarts.init(skiaRef.current, 'light', {
+    if (svgRef.current) {
+      chart = echarts.init(svgRef.current, 'light', {
         renderer: 'svg',
         width: Dimensions.get('window').width * 0.9,
         height: 300,
@@ -138,7 +138,7 @@ const Graph: React.FC<{
           </View>
         </TouchableOpacity>
       </View>
-      <SkiaChart ref={skiaRef} />
+      <SvgChart ref={svgRef} />
       <View style={{padding: 20}}>
         <Button text="Close" onPress={() => setShowModal(false)} />
       </View>

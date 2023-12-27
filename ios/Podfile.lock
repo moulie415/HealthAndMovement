@@ -717,7 +717,7 @@ PODS:
     - FirebaseCore (~> 10.0)
     - GoogleUtilities/Environment (~> 7.8)
     - PromisesObjC (~> 2.1)
-  - FirebaseAppCheckInterop (10.18.0)
+  - FirebaseAppCheckInterop (10.19.0)
   - FirebaseAuth (10.15.0):
     - FirebaseAppCheckInterop (~> 10.0)
     - FirebaseCore (~> 10.0)
@@ -725,14 +725,14 @@ PODS:
     - GoogleUtilities/Environment (~> 7.8)
     - GTMSessionFetcher/Core (< 4.0, >= 2.1)
     - RecaptchaInterop (~> 100.0)
-  - FirebaseAuthInterop (10.18.0)
+  - FirebaseAuthInterop (10.19.0)
   - FirebaseCore (10.15.0):
     - FirebaseCoreInternal (~> 10.0)
     - GoogleUtilities/Environment (~> 7.8)
     - GoogleUtilities/Logger (~> 7.8)
   - FirebaseCoreExtension (10.15.0):
     - FirebaseCore (~> 10.0)
-  - FirebaseCoreInternal (10.18.0):
+  - FirebaseCoreInternal (10.19.0):
     - "GoogleUtilities/NSData+zlib (~> 7.8)"
   - FirebaseDynamicLinks (10.15.0):
     - FirebaseCore (~> 10.0)
@@ -757,7 +757,7 @@ PODS:
     - FirebaseMessagingInterop (~> 10.0)
     - FirebaseSharedSwift (~> 10.0)
     - GTMSessionFetcher/Core (< 4.0, >= 2.1)
-  - FirebaseInstallations (10.18.0):
+  - FirebaseInstallations (10.19.0):
     - FirebaseCore (~> 10.0)
     - GoogleUtilities/Environment (~> 7.8)
     - GoogleUtilities/UserDefaults (~> 7.8)
@@ -771,8 +771,8 @@ PODS:
     - GoogleUtilities/Reachability (~> 7.8)
     - GoogleUtilities/UserDefaults (~> 7.8)
     - nanopb (< 2.30910.0, >= 2.30908.0)
-  - FirebaseMessagingInterop (10.18.0)
-  - FirebaseSharedSwift (10.18.0)
+  - FirebaseMessagingInterop (10.19.0)
+  - FirebaseSharedSwift (10.19.0)
   - FirebaseStorage (10.15.0):
     - FirebaseAppCheckInterop (~> 10.0)
     - FirebaseAuthInterop (~> 10.0)
@@ -781,9 +781,6 @@ PODS:
     - GTMSessionFetcher/Core (< 4.0, >= 2.1)
   - fmt (6.2.1)
   - glog (0.3.5)
-  - Google-Mobile-Ads-SDK (10.9.0):
-    - GoogleAppMeasurement (< 11.0, >= 7.0)
-    - GoogleUserMessagingPlatform (>= 1.1)
   - GoogleAppMeasurement (10.15.0):
     - GoogleAppMeasurement/AdIdSupport (= 10.15.0)
     - GoogleUtilities/AppDelegateSwizzler (~> 7.11)
@@ -804,7 +801,7 @@ PODS:
     - GoogleUtilities/Network (~> 7.11)
     - "GoogleUtilities/NSData+zlib (~> 7.11)"
     - nanopb (< 2.30910.0, >= 2.30908.0)
-  - GoogleDataTransport (9.2.5):
+  - GoogleDataTransport (9.3.0):
     - GoogleUtilities/Environment (~> 7.7)
     - nanopb (< 2.30910.0, >= 2.30908.0)
     - PromisesObjC (< 3.0, >= 1.2)
@@ -812,7 +809,6 @@ PODS:
     - AppAuth (~> 1.5)
     - GTMAppAuth (< 3.0, >= 1.3)
     - GTMSessionFetcher/Core (< 4.0, >= 1.1)
-  - GoogleUserMessagingPlatform (2.1.0)
   - GoogleUtilities/AppDelegateSwizzler (7.12.0):
     - GoogleUtilities/Environment
     - GoogleUtilities/Logger
@@ -896,7 +892,7 @@ PODS:
   - GTMAppAuth (2.0.0):
     - AppAuth/Core (~> 1.6)
     - GTMSessionFetcher/Core (< 4.0, >= 1.5)
-  - GTMSessionFetcher/Core (3.1.1)
+  - GTMSessionFetcher/Core (3.2.0)
   - hermes-engine (0.73.0):
     - hermes-engine/Pre-built (= 0.73.0)
   - hermes-engine/Pre-built (0.73.0)
@@ -926,8 +922,8 @@ PODS:
   - PromisesObjC (2.3.1)
   - PromisesSwift (2.3.1):
     - PromisesObjC (= 2.3.1)
-  - PurchasesHybridCommon (8.0.0):
-    - RevenueCat (= 4.30.5)
+  - PurchasesHybridCommon (8.1.1):
+    - RevenueCat (= 4.31.2)
   - RCT-Folly (2022.05.16.00):
     - boost
     - DoubleConversion
@@ -1830,7 +1826,7 @@ PODS:
     - React-Core
   - react-native-safe-area-context (4.7.2):
     - React-Core
-  - react-native-skia (0.1.229):
+  - react-native-skia (0.1.230):
     - glog
     - RCT-Folly (= 2022.05.16.00)
     - React
@@ -2017,7 +2013,7 @@ PODS:
     - React-logger (= 0.73.0)
     - React-perflogger (= 0.73.0)
   - RecaptchaInterop (100.0.0)
-  - RevenueCat (4.30.5)
+  - RevenueCat (4.31.2)
   - rn-fetch-blob (0.12.0):
     - React-Core
   - RNAppleAuthentication (2.2.2):
@@ -2086,17 +2082,11 @@ PODS:
     - glog
     - RCT-Folly (= 2022.05.16.00)
     - React-Core
-  - RNGoogleMobileAds (12.1.1):
-    - glog
-    - Google-Mobile-Ads-SDK (= 10.9.0)
-    - GoogleUserMessagingPlatform (= 2.1.0)
-    - RCT-Folly (= 2022.05.16.00)
-    - React-Core
   - RNGoogleSignin (10.0.1):
     - GoogleSignIn (~> 7.0)
     - React-Core
-  - RNPurchases (7.4.0):
-    - PurchasesHybridCommon (= 8.0.0)
+  - RNPurchases (7.5.1):
+    - PurchasesHybridCommon (= 8.1.1)
     - React-Core
   - RNReanimated (3.6.1):
     - glog
@@ -2107,9 +2097,11 @@ PODS:
     - glog
     - RCT-Folly (= 2022.05.16.00)
     - React-Core
-  - RNSentry (5.10.0):
+  - RNSentry (5.15.2):
+    - hermes-engine
     - React-Core
-    - Sentry/HybridSDK (= 8.11.0)
+    - React-hermes
+    - Sentry/HybridSDK (= 8.17.1)
   - RNSnackbar (2.6.2):
     - React-Core
   - RNSound (0.11.2):
@@ -2133,9 +2125,9 @@ PODS:
   - SDWebImageWebPCoder (0.8.5):
     - libwebp (~> 1.0)
     - SDWebImage/Core (~> 5.10)
-  - Sentry/HybridSDK (8.11.0):
-    - SentryPrivate (= 8.11.0)
-  - SentryPrivate (8.11.0)
+  - Sentry/HybridSDK (8.17.1):
+    - SentryPrivate (= 8.17.1)
+  - SentryPrivate (8.17.1)
   - SocketRocket (0.6.1)
   - Yoga (1.14.0)
 
@@ -2226,7 +2218,6 @@ DEPENDENCIES:
   - "RNFBMessaging (from `../node_modules/@react-native-firebase/messaging`)"
   - "RNFBStorage (from `../node_modules/@react-native-firebase/storage`)"
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
-  - RNGoogleMobileAds (from `../node_modules/react-native-google-mobile-ads`)
   - "RNGoogleSignin (from `../node_modules/@react-native-google-signin/google-signin`)"
   - RNPurchases (from `../node_modules/react-native-purchases`)
   - RNReanimated (from `../node_modules/react-native-reanimated`)
@@ -2270,11 +2261,9 @@ SPEC REPOS:
     - FirebaseSharedSwift
     - FirebaseStorage
     - fmt
-    - Google-Mobile-Ads-SDK
     - GoogleAppMeasurement
     - GoogleDataTransport
     - GoogleSignIn
-    - GoogleUserMessagingPlatform
     - GoogleUtilities
     - "gRPC-C++"
     - gRPC-Core
@@ -2465,8 +2454,6 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@react-native-firebase/storage"
   RNGestureHandler:
     :path: "../node_modules/react-native-gesture-handler"
-  RNGoogleMobileAds:
-    :path: "../node_modules/react-native-google-mobile-ads"
   RNGoogleSignin:
     :path: "../node_modules/@react-native-google-signin/google-signin"
   RNPurchases:
@@ -2499,7 +2486,7 @@ SPEC CHECKSUMS:
   BoringSSL-GRPC: 3175b25143e648463a56daeaaa499c6cb86dad33
   BVLinearGradient: 880f91a7854faff2df62518f0281afb1c60d49a3
   CocoaAsyncSocket: 065fd1e645c7abab64f7a6a2007a48038fdc6a99
-  DoubleConversion: 5189b271737e1565bdce30deb4a08d647e3f5f54
+  DoubleConversion: fea03f2699887d960129cc54bba7e52542b6f953
   FBAEMKit: d8312d8451ead46282adc7f3565ffc4965e3a4a7
   FBLazyVector: 39ba45baf4e398618f8b3a4bb6ba8fcdb7fc2133
   FBReactNativeSpec: 20cfca68498e27879514790359289d1df2b52c56
@@ -2511,32 +2498,30 @@ SPEC CHECKSUMS:
   Firebase: 66043bd4579e5b73811f96829c694c7af8d67435
   FirebaseAnalytics: 47cef43728f81a839cf1306576bdd77ffa2eac7e
   FirebaseAppCheck: 66eea1c882cddd1bce9d92a0a7efd596f7204782
-  FirebaseAppCheckInterop: 3cd914842ba46f4304050874cd284de82f154ffd
+  FirebaseAppCheckInterop: 37884781f3e16a1ba47e7ec80a1e805f987788e3
   FirebaseAuth: a55ec5f7f8a5b1c2dd750235c1bb419bfb642445
-  FirebaseAuthInterop: 5818713dcd7239beb96c1125e4b14d6a5a910e5f
+  FirebaseAuthInterop: f90d6820bf6ecf44753b9f13ba941902d00b525a
   FirebaseCore: 2cec518b43635f96afe7ac3a9c513e47558abd2e
   FirebaseCoreExtension: d3f1ea3725fb41f56e8fbfb29eeaff54e7ffb8f6
-  FirebaseCoreInternal: 8eb002e564b533bdcf1ba011f33f2b5c10e2ed4a
+  FirebaseCoreInternal: b444828ea7cfd594fca83046b95db98a2be4f290
   FirebaseDynamicLinks: 206d4ed3efd2b722822598017f3980d9fda89815
   FirebaseFirestore: b4c0eaaf24efda5732ec21d9e6c788d083118ca6
   FirebaseFunctions: e5a95bdd33077eefc3232381d24495ae66d3b1a7
-  FirebaseInstallations: e842042ec6ac1fd2e37d7706363ebe7f662afea4
+  FirebaseInstallations: 033d199474164db20c8350736842a94fe717b960
   FirebaseMessaging: 0c0ae1eb722ef0c07f7801e5ded8dccd1357d6d4
-  FirebaseMessagingInterop: e4ff7139aad39ab9149ae6462828ed3b8cdaa86c
-  FirebaseSharedSwift: 62e248642c0582324d0390706cadd314687c116b
+  FirebaseMessagingInterop: ec84569ed0436f52280ca07a214a83f48674cf5c
+  FirebaseSharedSwift: f34eeb7d3ea87a34497629b6ca41657beadef76a
   FirebaseStorage: 1d4be239ea32fb3c0f3680a6f2b706d6cabe37f2
   fmt: ff9d55029c625d3757ed641535fd4a75fedc7ce9
-  glog: 04b94705f318337d7ead9e6d17c019bd9b1f6b1b
-  Google-Mobile-Ads-SDK: e81e8b009a182dc8dd14951782efdbb30a5e4510
+  glog: c5d68082e772fa1c511173d6b30a9de2c05a69a2
   GoogleAppMeasurement: 722db6550d1e6d552b08398b69a975ac61039338
-  GoogleDataTransport: 54dee9d48d14580407f8f5fbf2f496e92437a2f2
+  GoogleDataTransport: 57c22343ab29bc686febbf7cbb13bad167c2d8fe
   GoogleSignIn: b232380cf495a429b8095d3178a8d5855b42e842
-  GoogleUserMessagingPlatform: dce302b8f1b84d6e945812ee7a15c3f65a102cbf
   GoogleUtilities: 0759d1a57ebb953965c2dfe0ba4c82e95ccc2e34
   "gRPC-C++": 0968bace703459fd3e5dcb0b2bed4c573dbff046
   gRPC-Core: 17108291d84332196d3c8466b48f016fc17d816d
   GTMAppAuth: 99fb010047ba3973b7026e45393f51f27ab965ae
-  GTMSessionFetcher: e8647203b65cee28c5f73d0f473d096653945e72
+  GTMSessionFetcher: 41b9ef0b4c08a6db4b7eb51a21ae5183ec99a2c8
   hermes-engine: 34304f8c6e8fa68f63a5fe29af82f227d817d7a7
   KTVCocoaHTTPServer: df8d7b861e603ff8037e9b2138aca2563a6b768d
   KTVHTTPCache: 588c3eb16f6bd1e6fde1e230dabfb7bd4e490a4d
@@ -2546,7 +2531,7 @@ SPEC CHECKSUMS:
   nanopb: d4d75c12cd1316f4a64e3c6963f879ecd4b5e0d5
   PromisesObjC: c50d2056b5253dadbd6c2bea79b0674bd5a52fa4
   PromisesSwift: 28dca69a9c40779916ac2d6985a0192a5cb4a265
-  PurchasesHybridCommon: 80262c5ffe6621e3cf3812e6103170f6d7fbcb79
+  PurchasesHybridCommon: 2439f6e671fb4d60878a652e4377fa7e588368e6
   RCT-Folly: 7169b2b1c44399c76a47b5deaaba715eeeb476c0
   RCTRequired: 5e3631b27c08716986980ef23eed8abdee1cdcaf
   RCTTypeSafety: 02a64828b0b428eb4f63de1397d44fb2d0747e85
@@ -2576,7 +2561,7 @@ SPEC CHECKSUMS:
   react-native-pager-view: d211379f61895b6349bd7e571b44a26d005c2975
   react-native-render-html: 984dfe2294163d04bf5fe25d7c9f122e60e05ebe
   react-native-safe-area-context: 7aa8e6d9d0f3100a820efb1a98af68aa747f9284
-  react-native-skia: d60e3e5d5a85568c5e635f72210cefcf0f6021e7
+  react-native-skia: c4569b037ce4a6cda596240438778a435350abe2
   react-native-spinkit: da294fd828216ad211fe36a5c14c1e09f09e62db
   react-native-splash-screen: 4312f786b13a81b5169ef346d76d33bc0c6dc457
   react-native-video: 967eead48aaa42c25a9e1d65c3b1ab30762a88df
@@ -2602,7 +2587,7 @@ SPEC CHECKSUMS:
   React-utils: af7833f722c1b89e1135fae297ba0ec03d441072
   ReactCommon: e7a02fe39df0e289729a6d1638f00b2550fedacb
   RecaptchaInterop: 7d1a4a01a6b2cb1610a47ef3f85f0c411434cb21
-  RevenueCat: c1e33f4e1f1fd239ba461652f02928e220becc31
+  RevenueCat: 63f6f4ae6916095561b90b2e1de86a492af67493
   rn-fetch-blob: f065bb7ab7fb48dd002629f8bdcb0336602d3cba
   RNAppleAuthentication: 0571c08da8c327ae2afc0261b48b4a515b0286a6
   RNAppleHealthKit: 60a6beefdd89a75811e9a8873a5e24f351dee681
@@ -2625,12 +2610,11 @@ SPEC CHECKSUMS:
   RNFBMessaging: b167065ee2fcc7fe43a32b35d79d5eb23bceb4ad
   RNFBStorage: aa0d6ac695aff1841f2b87285bb90ed6271d37d9
   RNGestureHandler: a426f2b9134a10ac56ff78593fb068541e68f0e7
-  RNGoogleMobileAds: 88b405cf133b5bcba89ce1c34aaded074c4b2cdd
   RNGoogleSignin: ccaa4a81582cf713eea562c5dd9dc1961a715fd0
-  RNPurchases: 0a8b86ed59f298f25f96ea61e3c54eb85b2c11d8
+  RNPurchases: 6460a884756442e75b2d25a1d7e58cd39ebbffe6
   RNReanimated: 9fc2b08ed365d7dc451bc451605d89c01f2c935b
   RNScreens: 2b73f5eb2ac5d94fbd61fa4be0bfebd345716825
-  RNSentry: 11917f7bf3e28806aca4c2791c6ba7522d8f09fe
+  RNSentry: b7f4f53bb7076f119558f8898fca901b48213f12
   RNSnackbar: 3727b42bf6c4314a53c18185b5203e915a4ab020
   RNSound: 6c156f925295bdc83e8e422e7d8b38d33bc71852
   RNSVG: ba3e7232f45e34b7b47e74472386cf4e1a676d0a
@@ -2639,8 +2623,8 @@ SPEC CHECKSUMS:
   RNWatch: fd30ca40a5b5ef58dcbc195638e68219bc455236
   SDWebImage: a7f831e1a65eb5e285e3fb046a23fcfbf08e696d
   SDWebImageWebPCoder: 908b83b6adda48effe7667cd2b7f78c897e5111d
-  Sentry: 39d57e691e311bdb73bc1ab5bbebbd6bc890050d
-  SentryPrivate: 48712023cdfd523735c2edb6b06bedf26c4730a3
+  Sentry: d9f99f9cc13777c5d938650c1e1c85047bb4f0d1
+  SentryPrivate: 839b1e58addf58624087a80b2628e543193fa8ef
   SocketRocket: f32cd54efbe0f095c4d7594881e52619cfe80b17
   Yoga: 44003f970aa541b79dfdd59cf236fda41bd5890f
 

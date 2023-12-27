@@ -10,7 +10,6 @@ import Profile from '../../../types/Profile';
 import {MyRootState} from '../../../types/Shared';
 import AbsoluteSpinner from '../../commons/AbsoluteSpinner';
 import {SettingsState} from '../../../reducers/settings';
-import {useInterstitialAd} from 'react-native-google-mobile-ads';
 import EducationCard from '../../commons/EducationCard';
 
 const ArticleList: React.FC<{
@@ -20,51 +19,17 @@ const ArticleList: React.FC<{
   loading: boolean;
   settings: SettingsState;
 }> = ({navigation, profile, filtered, loading, settings}) => {
-  const [selectedItem, setSelectedItem] = useState<Education>();
-  const {load, show, isLoaded, isClosed} = useInterstitialAd(
-    UNIT_ID_INTERSTITIAL,
-    {
-      keywords: AD_KEYWORDS,
-    },
-  );
-  useEffect(() => {
-    if (settings.ads) {
-      load();
-    }
-  }, [settings.ads, load]);
-
-  useEffect(() => {
-    if (isClosed && settings.ads) {
-      load();
-    }
-  }, [isClosed, load, settings.ads]);
-
-  useEffect(() => {
-    if (isClosed && selectedItem) {
-      navigation.navigate('EducationArticle', {education: selectedItem});
-    }
-  }, [isClosed, navigation, selectedItem]);
-
   const onPress = useCallback(
     (item?: Education) => {
-      if (item && item.premium) {
-        if (profile.premium) {
-          navigation.navigate('EducationArticle', {education: item});
-        } else {
+      if (item) {
+        if (!profile.premium && item.premium) {
           navigation.navigate('Premium', {});
-        }
-      } else if (item && profile.premium) {
-        navigation.navigate('EducationArticle', {education: item});
-      } else {
-        if (isLoaded && settings.ads) {
-          show();
-          setSelectedItem(item);
-        } else if (item) {
+        } else {
           navigation.navigate('EducationArticle', {education: item});
         }
       }
     },
-    [profile.premium, navigation, isLoaded, show, settings.ads],
+    [profile.premium, navigation],
   );
   return filtered.length ? (
     <FlatList
